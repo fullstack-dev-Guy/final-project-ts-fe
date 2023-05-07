@@ -6,6 +6,9 @@ export interface Blog {
   firstname: string;
   lastname: string;
   id: string | string;
+  firebaseId: string;
+  useremail: string;
+  date: string;
 }
 
 export interface Product {
@@ -29,7 +32,6 @@ export type Cart = {
   updatedAt: string;
   userID: string;
   ses: string;
-  userID: string;
   email: string;
   orderNumber: string;
   date: string;
@@ -75,6 +77,8 @@ export interface MyFetchResponse<T> {
   data: T | null;
   data1: T | null;
   data2: T | null;
+  data3: T | null;
+  data4: T | null;
   status: "success" | "error";
   message?: string;
 }

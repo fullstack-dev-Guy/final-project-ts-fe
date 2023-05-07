@@ -2,14 +2,16 @@ import { collection, getDocs } from "firebase/firestore";
 import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { db } from "../../lib/firebase";
 import { MyFetchResponse, Blog } from "../../types/firestore";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function Blogs() {
+  const { user } = useAuth();
   const blogs = useLoaderData() as MyFetchResponse<Blog[]>;
   const navigate = useNavigate();
 
-  if (blogs.status === "error") return <p>{blogs.message}</p>;
+  // if (blogs.status === "error") return <p>{blogs.message}</p>;
   return (
-    <div className="mx-auto mt-28 max-w-screen-xl p-6">
+    <div className="mx-auto mt-44 max-w-screen-xl p-6">
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-16 lg:px-6">
           <div className="mx-auto mb-6 max-w-screen-sm text-center lg:mb-6">
@@ -24,22 +26,23 @@ export default function Blogs() {
           </div>
 
           <div className="  mb-2 flex justify-center">
-            <button
-              onClick={() => navigate("addblog")}
-              className=" rounded-lg border border-gray-700 bg-yellow-200 p-2 text-base  font-semibold  text-violet-700 hover:bg-yellow-300 focus:outline-none focus:ring focus:ring-violet-300 active:bg-yellow-500 dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-            >
-              צור בלוג חדש
-            </button>
+            {user ? (
+              <button
+                onClick={() => navigate("addblog")}
+                className=" rounded-lg border border-gray-700 bg-yellow-200 p-2 text-base  font-semibold  text-violet-700 hover:bg-yellow-300 focus:outline-none focus:ring focus:ring-violet-300 active:bg-yellow-500 dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+              >
+                צור בלוג חדש
+              </button>
+            ) : null}
           </div>
 
           <div className="flex-auto">
-            {blogs && blogs.data ? (
+            {blogs.data ? (
               blogs.data.map((blog) => (
                 <article
                   key={blog.id}
                   className="mb-4 rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800"
                 >
-                  <p>{blog.id}</p>
                   <div className=" ">
                     <h2 className=" mb-2 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white ">
                       {blog.title}
@@ -51,15 +54,8 @@ export default function Blogs() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <span className="font-medium dark:text-white">
-                        {blog.firstname}
-                        <span>_</span>
-                        {blog.lastname}
+                        {blog.date}
                       </span>
-                    </div>
-                    <div className="mt-2">
-                      <button onClick={() => navigate("deleteblog/" + blog.id)}>
-                        מחיקת בלוג
-                      </button>
                     </div>
 
                     <div className="mt-2">
@@ -67,12 +63,6 @@ export default function Blogs() {
                         ... קרא עוד
                       </button>
                     </div>
-                  </div>
-
-                  <div className="mt-2">
-                    <button onClick={() => navigate("editblog/" + blog.id)}>
-                      ערוך בלוג
-                    </button>
                   </div>
                 </article>
               ))
@@ -91,6 +81,16 @@ export default function Blogs() {
 
 export async function blogsLoader() {
   try {
+    const response1 = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/users"
+    );
+    const usersFromMongoDb = await response1.json();
+
+    const data1 = usersFromMongoDb;
+    if (!response1.ok) {
+      throw Error("could not fetch the data");
+    }
+
     const collectionRef = collection(db, "blog");
     const querySnapshot = await getDocs(collectionRef);
     const docs = querySnapshot.docs.map((doc) => ({
@@ -99,15 +99,18 @@ export async function blogsLoader() {
     }));
 
     const response = docs;
-    console.log(response);
-    console.log("blogsloader");
+
     const data = response;
     if (!response) {
       throw Error("Could not fetch the data");
     }
-    return { data, status: "success" };
+    return { data, data1, status: "success" };
   } catch (error) {
     console.error(error);
-    return { status: "error", message: (error as Error).message, data: null };
+    return {
+      status: "error",
+      message: (error as Error).message,
+      docdata: null,
+    };
   }
 }

@@ -7,32 +7,27 @@ export default function EmailVarification() {
   const userEmail = auth.currentUser?.email as string;
 
   const { user } = useAuth();
-  console.log(user);
+
   if (user === undefined) {
     <p>Loading...</p>;
   }
 
   if (user && user.emailVerified) {
-    console.log(user);
     return <Navigate to="/" />;
   }
 
   const handleEmailResend = async (userEmail: string) => {
     if (auth.currentUser && !auth.currentUser.emailVerified) {
       await sendEmailVerification(auth.currentUser);
-
-      console.log(
-        auth.currentUser.emailVerified + " " + "email varified status"
-      );
     } else {
-      console.log("email verified");
+      console.error("email verified");
       return;
     }
     return;
   };
 
   return (
-    <div className="mx-auto mt-20 max-w-screen-xl p-6 sm:mt-20 md:mt-20 lg:mt-20 xl:mt-28">
+    <div className="mx-auto mt-44 max-w-screen-xl p-6 sm:mt-44 md:mt-44 lg:mt-44 xl:mt-44">
       <section className=" bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">

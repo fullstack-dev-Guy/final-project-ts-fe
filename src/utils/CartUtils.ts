@@ -2,8 +2,6 @@ import { redirect, useParams } from "react-router-dom";
 
 const { id } = useParams();
 
-console.log({ id });
-
 let currentId: string = id!;
 
 export async function removeOneProducrFromCart(
@@ -12,7 +10,8 @@ export async function removeOneProducrFromCart(
 ) {
   try {
     const responseUpdateCartproducts = await fetch(
-      "http://localhost:3000/routes/carts/" + currentId,
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+        currentId,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -26,8 +25,6 @@ export async function removeOneProducrFromCart(
     const data = await responseUpdateCartproducts.json();
 
     window.location.reload();
-    console.log(responseUpdateCartproducts.ok + "DELETPRODUCT");
-    console.log(data);
 
     if (!responseUpdateCartproducts.ok) {
       throw Error("could not complete the action");

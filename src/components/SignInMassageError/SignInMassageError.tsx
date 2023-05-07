@@ -6,14 +6,14 @@ export default function SignInMassageError() {
   const auth = getAuth();
 
   const { user } = useAuth();
-  console.log(user);
+
   if (user === undefined) {
     <p>Loading...</p>;
   }
 
   return (
-    <div className="mx-auto mt-20 max-w-screen-xl p-6 sm:mt-20 md:mt-20 lg:mt-20 xl:mt-28">
-      <section className=" bg-white dark:bg-gray-900">
+    <div className="mx-auto  max-w-screen-xl  sm:mt-20 md:mt-20 lg:mt-20 xl:mt-28">
+      <section className="mt-48 bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-red-600 dark:text-indigo-500 lg:text-6xl">
@@ -27,7 +27,7 @@ export default function SignInMassageError() {
               סיסמה
             </p>
 
-            <Link to="/tosignin" role="button">
+            <Link to="/" role="button">
               <button
                 className="my-4 ml-4 inline-flex rounded-lg bg-indigo-600 px-5
                     py-2.5 text-center text-sm font-medium text-white

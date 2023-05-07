@@ -5,22 +5,18 @@ import { auth } from "../../lib/firebase";
 export default function AddToShoppingCart() {
   const { id } = useParams();
 
-  console.log({ id });
-
   let currentId: string = id!; // זה איי די של מוצר
-  console.log(currentId);
 
   const cartInStorage = localStorage.getItem("cartID");
-  console.log("cartInStorage");
-  console.log(cartInStorage);
 
   async function addToCarts(currentId: string, cartInStorage: string) {
     ////////////////////////////////////////////////////////////////////////////////////////////
     if (cartInStorage === null) {
       if (!auth.currentUser) {
-        const getAllCarts1 = await fetch("http://localhost:3000/routes/carts"); //GET
+        const getAllCarts1 = await fetch(
+          "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts"
+        ); //GET
         const dataGetAllCarts1 = await getAllCarts1.json();
-        console.log(getAllCarts1.ok);
 
         if (!getAllCarts1.ok) {
           throw Error("could not fetch the data");
@@ -29,27 +25,25 @@ export default function AddToShoppingCart() {
         const getAllCartId = JSON.parse(JSON.stringify(dataGetAllCarts1)).map(
           (doc: Cart) => doc.id
         );
-        console.log("getAllCartId");
-        console.log(getAllCartId);
 
         //post
         try {
-          const response = await fetch("http://localhost:3000/routes/carts", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              products: [],
-              role: "guest",
-              userID: " ",
-              email: "tempemail@gmail.com",
-              orderNumber: " ",
-              date: " ",
-              ses: "",
-            }),
-          });
-          console.log(response.ok);
-          console.log("response");
-          console.log(response);
+          const response = await fetch(
+            "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                products: [],
+                role: "guest",
+                userID: " ",
+                email: "tempemail@gmail.com",
+                orderNumber: " ",
+                date: " ",
+                ses: "",
+              }),
+            }
+          );
 
           if (!response.ok) {
             throw Error("could not complete the action");
@@ -57,10 +51,9 @@ export default function AddToShoppingCart() {
 
           //מוציא מתוך כל הסלי קניות את הסל קניות של המשתמש הנוכחי
           const getAllCarts2 = await fetch(
-            "http://localhost:3000/routes/carts"
+            "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts"
           ); //GET after ctreat(post)
           const dataGetAllCarts2 = await getAllCarts2.json();
-          console.log(getAllCarts2.ok);
 
           if (!getAllCarts2.ok) {
             throw Error("could not fetch the data");
@@ -69,21 +62,18 @@ export default function AddToShoppingCart() {
           const getAllCartId2 = JSON.parse(
             JSON.stringify(dataGetAllCarts2)
           ).map((doc: Cart) => doc.id);
-          console.log("getAllCartId-aftercreating");
-          console.log(getAllCartId2);
 
           let cartDifference = getAllCartId2.filter(
             (x: number) => !getAllCartId.includes(x)
           );
-          console.log("cartDifference");
-          console.log(cartDifference);
+
           localStorage.setItem("cartID", cartDifference);
 
-          console.log("cart already exist");
-          //throw Error("cart already exist");
+          console.error("cart already exist");
 
           const response2 = await fetch(
-            "http://localhost:3000/routes/carts/" + cartDifference,
+            "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+              cartDifference,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -94,10 +84,6 @@ export default function AddToShoppingCart() {
               }),
             }
           );
-
-          console.log("response2");
-          console.log(response2);
-          console.log(response2.ok);
 
           if (!response2.ok) {
             throw Error("could not complete the action");
@@ -113,9 +99,10 @@ export default function AddToShoppingCart() {
         window.location.reload();
         ///////////////////////////////////////////////////////b
       } else {
-        const getAllCarts1 = await fetch("http://localhost:3000/routes/carts"); //GET
+        const getAllCarts1 = await fetch(
+          "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts"
+        ); //GET
         const dataGetAllCarts1 = await getAllCarts1.json();
-        console.log(getAllCarts1.ok);
 
         if (!getAllCarts1.ok) {
           throw Error("could not fetch the data");
@@ -124,27 +111,25 @@ export default function AddToShoppingCart() {
         const getAllCartId = JSON.parse(JSON.stringify(dataGetAllCarts1)).map(
           (doc: Cart) => doc.id
         );
-        console.log("getAllCartId");
-        console.log(getAllCartId);
 
         //post
         try {
-          const response = await fetch("http://localhost:3000/routes/carts", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              products: [],
-              role: "user",
-              userID: auth.currentUser.uid,
-              email: auth.currentUser?.email,
-              orderNumber: " ",
-              date: " ",
-              ses: "",
-            }),
-          });
-          console.log(response.ok);
-          console.log("response");
-          console.log(response);
+          const response = await fetch(
+            "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                products: [],
+                role: "user",
+                userID: auth.currentUser.uid,
+                email: auth.currentUser?.email,
+                orderNumber: " ",
+                date: " ",
+                ses: "",
+              }),
+            }
+          );
 
           if (!response.ok) {
             throw Error("could not complete the action");
@@ -152,10 +137,9 @@ export default function AddToShoppingCart() {
 
           //מוציא מתוך כל הסלי קניות את הסל קניות של המשתמש הנוכחי
           const getAllCarts2 = await fetch(
-            "http://localhost:3000/routes/carts"
+            "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts"
           ); //GET after ctreat(post)
           const dataGetAllCarts2 = await getAllCarts2.json();
-          console.log(getAllCarts2.ok);
 
           if (!getAllCarts2.ok) {
             throw Error("could not fetch the data");
@@ -164,19 +148,16 @@ export default function AddToShoppingCart() {
           const getAllCartId2 = JSON.parse(
             JSON.stringify(dataGetAllCarts2)
           ).map((doc: Cart) => doc.id);
-          console.log("getAllCartId-aftercreating");
-          console.log(getAllCartId2);
 
           let cartDifference = getAllCartId2.filter(
             (x: number) => !getAllCartId.includes(x)
           );
-          console.log("cartDifference");
-          console.log(cartDifference);
-          console.log(currentId + "currentID");
+
           localStorage.setItem("cartID", cartDifference);
           //////////////////////////////////////////////////
           const response2 = await fetch(
-            "http://localhost:3000/routes/carts/" + cartDifference,
+            "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+              cartDifference,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -187,10 +168,6 @@ export default function AddToShoppingCart() {
               }),
             }
           );
-
-          console.log("response2 ישירות הוספת מוצר");
-          console.log(response2);
-          console.log(response2.ok);
 
           if (!response2.ok) {
             throw Error("could not complete the action");
@@ -208,13 +185,13 @@ export default function AddToShoppingCart() {
         window.location.reload();
       }
     } else {
-      console.log("cart already exist");
-      //throw Error("cart already exist");
+      console.error("cart already exist");
 
       //////////////////////////////////////////////////////////////////////////////////////////////
 
       const response2 = await fetch(
-        "http://localhost:3000/routes/carts/" + cartInStorage,
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+          cartInStorage,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -225,10 +202,6 @@ export default function AddToShoppingCart() {
           }),
         }
       );
-
-      console.log("response2");
-      console.log(response2);
-      console.log(response2.ok);
 
       if (!response2.ok) {
         throw Error("could not complete the action");

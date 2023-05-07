@@ -1,12 +1,10 @@
-import { getAuth } from "firebase/auth";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
+import { Link } from "react-router-dom";
 
 export default function ResetPasswordPage() {
   return (
-    <div className="mx-auto mt-20 max-w-screen-xl p-6 sm:mt-20 md:mt-20 lg:mt-20 xl:mt-28">
+    <div className="mx-auto mt-40 max-w-screen-xl p-6 sm:mt-40 md:mt-40 lg:mt-40 xl:mt-40">
       <section className=" bg-white dark:bg-gray-900">
-        <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-16 lg:px-6">
+        <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-6 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
             <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-yellow-400 dark:text-indigo-500 lg:text-6xl">
               איפוס סיסמה

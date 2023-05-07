@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Link, redirect, useLoaderData } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { auth } from "../../lib/firebase";
 import { useAuth } from "../../context/AuthProvider";
+import emailjs from "@emailjs/browser";
 
 import {
   Cart,
@@ -10,41 +11,38 @@ import {
   Product,
   userDb,
 } from "../../types/firestore";
+import { emailjsObject } from "../../lib/mailjs";
 
 export default function OrderPage() {
+  useEffect(() => {
+    window.process = {
+      ...window.process,
+    };
+  }, []);
+  const form = useRef();
+  const navigate = useNavigate();
   const { user } = useAuth(); // זה יוצר בעיה ברינדור  של הסל
 
-  const orderNumber = Math.floor(Math.random() * 100000000);
-  console.log(orderNumber);
-  localStorage.setItem("orderN", orderNumber.toString());
+  let orderNumber = Math.floor(Math.random() * 100000000).toString();
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   var currentCart = localStorage.getItem("cartID");
   //const { user } = useAuth(); זה יוצר בעיה ברינדור  של הסל
   let authIndication = auth.currentUser;
 
   const carts = useLoaderData() as MyFetchResponse<Cart[]>;
-  console.log("authIndication");
-  console.log(authIndication);
-  console.log("carts");
-  console.log(carts);
-  console.log("currentCart");
-  console.log(currentCart);
 
   const arryForCartId = JSON.parse(JSON.stringify(carts.data)).map(
     (x: Cart) => x.id
   );
-  console.log(arryForCartId);
 
   const arryForCartProducts = JSON.parse(JSON.stringify(carts.data)).map(
     (x: Cart) => x.products
   );
-  console.log(arryForCartProducts);
 
   const arryForCartUserID = JSON.parse(JSON.stringify(carts.data)).map(
     (x: Cart) => x.userID
   );
-
-  console.log(arryForCartUserID);
 
   const currentCartDetails = carts.data?.filter((x) => x.id === currentCart); //i got the cart object with all the details
 
@@ -55,29 +53,19 @@ export default function OrderPage() {
     priceDiscount = "no";
   }
 
-  console.log("currentCartDetails");
-  console.log(currentCartDetails);
   var getAllProductsIdFromCurrentCart = currentCartDetails?.map(
     (x) => x.products
   );
-  console.log("getAllProductsIdFromCurrentCart");
-  console.log(getAllProductsIdFromCurrentCart);
-  console.log(getAllProductsIdFromCurrentCart![0]);
 
   let productsArry: string[] = getAllProductsIdFromCurrentCart![0].map(
     (product) => product
   );
-  console.log("productsArry");
-  console.log(productsArry);
 
   const products = useLoaderData() as MyFetchResponse<Product>;
-  console.log("products");
-  console.log(products);
+
   var arryForGettingAllProducts = JSON.parse(
     JSON.stringify(products.data1)
   ).map((x: Product) => x);
-  console.log("arryForGettingAllProducts");
-  console.log(arryForGettingAllProducts);
 
   let getProductDetails: Product[] = [];
 
@@ -88,17 +76,14 @@ export default function OrderPage() {
       }
     }
   }
-  console.log("getProductDetails");
-  console.log(getProductDetails); // זה מערך של מוצרים בסל עם כל המידע עליהם
+
+  // console.log(getProductDetails); // זה מערך של מוצרים בסל עם כל המידע עליהם
 
   ///////////////////////////////////////////////// חישוב הסכום של המוצרים לפי מחיר ולפי משתמש רשום שמקבל הנחה
 
   let getAllCartProductPrice = JSON.parse(
     JSON.stringify(getProductDetails)
   ).map((x: Product) => x.productprice);
-
-  console.log("getAllCartProductPrice");
-  console.log(getAllCartProductPrice);
 
   let productsSum: number = 0;
   if (currentCartDetails![0].userID !== " ") {
@@ -107,15 +92,11 @@ export default function OrderPage() {
       productsSum = productsSum + temp;
     }
     productsSum = productsSum - productsSum * 0.05;
-    console.log("productsSum");
-    console.log(productsSum);
   } else {
     for (let i = 0; i < getAllCartProductPrice.length; i++) {
       let temp: number = Number(getAllCartProductPrice[i]);
       productsSum = productsSum + temp;
     }
-    console.log("productsSum");
-    console.log(productsSum);
   }
   let newproductsSum: string = productsSum.toString();
   sessionStorage.setItem("productsSum", newproductsSum);
@@ -125,14 +106,11 @@ export default function OrderPage() {
     getProductDetails.includes(x)
   );
 
-  console.log("getProductDetails1");
-  console.log(getProductDetails1); // זה מערך של מוצרים עם כל המידע עליהם
+  //console.log(getProductDetails1); // זה מערך של מוצרים עם כל המידע עליהם
 
   var allProductsIdArry: string[] = JSON.parse(
     JSON.stringify(arryForGettingAllProducts)
   ).map((x: Product) => x.id);
-  console.log("allProductsIdArry");
-  console.log(allProductsIdArry);
 
   let quantityOfProductsArry: number[] = []; // כמה פעמים מופיע מוצר במערך ? לכאן נכניס את מספר הפעמים שמופיע
   let cartProductCorolationtoQuantity: string[] = [];
@@ -154,18 +132,16 @@ export default function OrderPage() {
   cartProductCorolationtoQuantity = cartProductCorolationtoQuantity.filter(
     (e) => String(e).trim()
   );
-  console.log("quantityOfProductsAryy");
-  console.log(quantityOfProductsArry); //סכום המערך יתן את כמות המוצרים הכללית בסל
-  console.log("cartProductCorolationtoQuantity");
-  console.log(cartProductCorolationtoQuantity);
+
+  //console.log(quantityOfProductsArry); //סכום המערך יתן את כמות המוצרים הכללית בסל
+
   ///////////////////////////////////////////////////////////////// חישוב כמות הפריטים בסל
   let howManyProducts: number = 0;
   for (let i = 0; i < quantityOfProductsArry.length; i++) {
     let temp: number = quantityOfProductsArry[i];
     howManyProducts = howManyProducts + temp;
   }
-  console.log("howManyProducts");
-  console.log(howManyProducts);
+
   let newhowManyProducts: string = howManyProducts.toString();
   sessionStorage.setItem("itemquantity", newhowManyProducts);
   //////////////////////////////////////////////////////////////////
@@ -175,8 +151,6 @@ export default function OrderPage() {
       getProductDetails1[i].quantity = quantityOfProductsArry[i];
     }
   }
-  console.log("getProductDetails1");
-  console.log(getProductDetails1);
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,19 +162,8 @@ export default function OrderPage() {
   let theItemsQuantity = Number(sessionStorage.getItem("itemquantity"));
   let theAllProductsSum: string | null = sessionStorage.getItem("productsSum");
 
-  console.log("currentCart");
-  console.log(currentCart);
-  console.log("currentUser");
-  console.log(currentUser);
-  console.log("theItemsQuantity");
-  console.log(theItemsQuantity);
-  console.log("theAllProductsSum");
-  console.log(theAllProductsSum);
-
   const newDate = new Date();
   const currentTime = newDate.toLocaleString("he-IL");
-  console.log("currentTime");
-  console.log(currentTime);
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -222,7 +185,7 @@ export default function OrderPage() {
     userUpdateWithId = " ";
   }
   let orderNumber1 = orderNumber.toString();
-
+  const [orderN, setOrderN] = useState(orderNumber1);
   var allCartProductToString = JSON.stringify(getProductDetails1);
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   const handleSubmitOrderForm = async (
@@ -241,10 +204,32 @@ export default function OrderPage() {
     Address: string,
     firebaseUserID: string
   ) => {
+    localStorage.setItem("orderN", orderNumber1.toString());
+
+    const checkEmail = (email: string) => {
+      if (email === "") {
+        setEmailError("Email is a required field");
+        return false;
+      }
+      if (user && auth.currentUser?.email !== email) {
+        setEmailError("זה לא האימייל שנרשמת איתו");
+        return false;
+      } else {
+        setEmailError("");
+        return true;
+      }
+    };
+    const isOkEmail = checkEmail(email);
+
+    if (!isOkEmail) {
+      return console.log(isOkEmail);
+    }
+
     ///////////////////////////////////////////////////////////////////// GET
-    const getallorders1 = await fetch("http://localhost:3000/routes/orders");
+    const getallorders1 = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/orders"
+    );
     const data1 = await getallorders1.json();
-    console.log(getallorders1.ok);
 
     if (!getallorders1.ok) {
       throw Error("could not fetch the data");
@@ -253,41 +238,41 @@ export default function OrderPage() {
     const arryForOrdersDetectCurrentOrderId1 = JSON.parse(
       JSON.stringify(data1)
     ).map((x: Order) => x.id);
-    console.log("arryForOrdersDetectCurrentOrderId1");
-    console.log(arryForOrdersDetectCurrentOrderId1);
 
     ////////////////////////////////////////////////////////////////// POST
 
-    const response = await fetch("http://localhost:3000/routes/orders", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstname: firstname,
-        lastname: lastname,
-        phonenumber: phone,
-        email: email,
-        otherrequest: otherrequest,
-        orderstatus: "created",
-        itemquantity: itemquantity,
-        paymentamount: paymentamount,
-        date: date,
-        role: role,
-        cart: cart,
-        address: Address,
-        firebaseUserID: firebaseUserID,
-      }),
-    });
+    const response = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/orders",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstname: firstname,
+          lastname: lastname,
+          phonenumber: phone,
+          email: email,
+          otherrequest: otherrequest,
+          orderstatus: "created",
+          itemquantity: itemquantity,
+          paymentamount: paymentamount,
+          date: date,
+          role: role,
+          cart: cart,
+          address: Address,
+          firebaseUserID: firebaseUserID,
+        }),
+      }
+    );
 
-    console.log(response.ok);
-    console.log("finished");
     if (!response.ok) {
       throw Error("could not complete the action of fetch to order");
     }
 
     ///////////////////////////////////////////////////////////////////// GET
-    const getallorders2 = await fetch("http://localhost:3000/routes/orders");
+    const getallorders2 = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/orders"
+    );
     const data = await getallorders2.json();
-    console.log(getallorders2.ok);
 
     if (!getallorders2.ok) {
       throw Error("could not fetch the data");
@@ -296,18 +281,16 @@ export default function OrderPage() {
     const arryForOrdersDetectCurrentOrderId2 = JSON.parse(
       JSON.stringify(data)
     ).map((x: Order) => x.id);
-    console.log("arryForOrdersDetectCurrentOrderId2");
-    console.log(arryForOrdersDetectCurrentOrderId2);
 
     //////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////////////////// GET
 
-    const getallUsers = await fetch("http://localhost:3000/routes/users");
+    const getallUsers = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/users"
+    );
     const data3 = await getallUsers.json();
-    console.log(getallUsers.ok);
-    console.log("data3");
-    console.log(data3);
+
     if (!getallUsers.ok) {
       throw Error("could not fetch the data");
     }
@@ -318,30 +301,22 @@ export default function OrderPage() {
       (x: userDb) => x.firebaseUserID
     );
 
-    console.log("temp1");
-    console.log(temp1);
-    console.log("temp2");
-    console.log(temp2);
-
     for (let i = 0; i < temp1.length; i++) {
       if (userUpdateWithId === temp2[i]) {
         var currentUserMongoDB = temp1[i];
       }
     }
 
-    console.log("currentUserMongoDB");
-    console.log(currentUserMongoDB);
     ////////////////////////////////////////////////////////////////// PUT
 
     let currentOrderId = arryForOrdersDetectCurrentOrderId2.filter(
       (x: string) => !arryForOrdersDetectCurrentOrderId1.includes(x)
     ); // שומר את האיי די של ההזמנה הנוכחית
 
-    console.log("currentOrderId");
-    console.log(currentOrderId);
     if (user) {
       const responseUpdateCartproducts = await fetch(
-        "http://localhost:3000/routes/users/" + currentUserMongoDB,
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/users/" +
+          currentUserMongoDB,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -352,8 +327,7 @@ export default function OrderPage() {
           }),
         }
       );
-      console.log(responseUpdateCartproducts.ok);
-      console.log("finished");
+
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action of fetch to order");
       }
@@ -361,7 +335,7 @@ export default function OrderPage() {
     ////////////////////////////////////////////////////////////////// POST
 
     const responsePostToArchives = await fetch(
-      "http://localhost:3000/routes/cartsarchives",
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/cartsarchives",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -380,20 +354,41 @@ export default function OrderPage() {
       }
     );
 
-    console.log(responsePostToArchives.ok);
-
     if (!responsePostToArchives.ok) {
       throw Error("could not complete the action of fetch to order");
     }
 
     /////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////
+    var templateParams = {
+      email,
+      name: firstname,
+      notes: "לקוח יקר , תודה רבה על ההזמנה",
+      ordern: orderNumber1,
+      itemquantity: itemquantity,
+      paymentamount: paymentamount,
+      orderdate: date,
+    };
 
-    console.log("finished2");
-    return redirect("/ordernumberpage");
+    const service = emailjsObject.serviceId;
+    const template = emailjsObject.templateId;
+    const publickey = emailjsObject.publiceKey;
+
+    emailjs.send(service, template, templateParams, publickey).then(
+      function (response) {
+        console.log("SUCCESS!", response.status, response.text);
+      },
+      function (error) {
+        console.log("FAILED...", error);
+      }
+    );
+    /////////////////////////////////////////////
+
+    return navigate("/orderpage/ordernumberpage");
   };
 
   return (
-    <div className="  mx-auto mt-10 mt-12 max-w-screen-2xl ">
+    <div className="  mx-auto  mt-12 max-w-screen-2xl ">
       <div
         id="updateProductModal"
         className="flex h-modal  w-full items-center justify-center justify-center  md:inset-0 md:h-full"
@@ -414,7 +409,7 @@ export default function OrderPage() {
               </Link>
             </div>
 
-            <form action="#">
+            <form>
               <div className="mb-4 grid gap-4 sm:grid-cols-2">
                 <div>
                   <label
@@ -473,7 +468,7 @@ export default function OrderPage() {
                 </div>
                 <div>
                   <label
-                    htmlFor="price2"
+                    htmlFor="email"
                     className="mb-2 block text-center text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Email
@@ -483,11 +478,16 @@ export default function OrderPage() {
                     value={email}
                     type="email"
                     // value="399"
-                    name="price2"
+                    name="email"
                     id="price2"
                     className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-center text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                     placeholder="Email"
                   />
+                  {emailError ? (
+                    <p className="text-center font-medium text-red-700">
+                      {emailError}
+                    </p>
+                  ) : null}
                 </div>
                 <div>
                   <label
@@ -507,6 +507,7 @@ export default function OrderPage() {
                     placeholder="Phone Number"
                   />
                 </div>
+
                 <div className="mx-auto border p-2 text-center">
                   <span className="text-lg">פרטי ההזמנה</span>
                   <table className="">
@@ -582,44 +583,46 @@ export default function OrderPage() {
                 </h3>
               </div>
               <div className="flex flex-wrap justify-center gap-x-2 ">
-                <button
-                  type="button"
-                  className="border-grey-600  text-black-600 focus:ring-grey-300 dark:border-grey-500 dark:text-grey-500 dark:hover:bg-grey-600 dark:focus:ring-grey-900 mt-2 rounded-lg border-4 p-2 text-center text-xl font-medium hover:bg-green-500 hover:text-white focus:outline-none focus:ring-4 dark:hover:text-white"
-                >
-                  PayPal
-                </button>
-                <button
-                  type="button"
-                  className="border-grey-600  text-black-600 focus:ring-grey-300 dark:border-grey-500 dark:text-grey-500 dark:hover:bg-grey-600 dark:focus:ring-grey-900 mt-2 rounded-lg border-4 p-2 text-center text-xl font-medium hover:bg-green-500 hover:text-white focus:outline-none focus:ring-4 dark:hover:text-white"
-                >
-                  Credit Card
-                </button>
-                <Link to="ordernumberpage" role="button">
+                <Link to="/notactivemassage">
                   <button
-                    onClick={() =>
-                      handleSubmitOrderForm(
-                        orderNumber1,
-                        allCartProductToString,
-                        firstname,
-                        lastname,
-                        phone,
-                        email,
-                        otherrequest,
-                        theItemsQuantity!,
-                        theAllProductsSum!,
-                        currentTime,
-                        role,
-                        currentCart!,
-                        fulladdress,
-                        userUpdateWithId!
-                      )
-                    }
                     type="button"
                     className="border-grey-600  text-black-600 focus:ring-grey-300 dark:border-grey-500 dark:text-grey-500 dark:hover:bg-grey-600 dark:focus:ring-grey-900 mt-2 rounded-lg border-4 p-2 text-center text-xl font-medium hover:bg-green-500 hover:text-white focus:outline-none focus:ring-4 dark:hover:text-white"
                   >
-                    At the place
+                    PayPal
                   </button>
                 </Link>
+                <Link to="/notactivemassage">
+                  <button
+                    type="button"
+                    className="border-grey-600  text-black-600 focus:ring-grey-300 dark:border-grey-500 dark:text-grey-500 dark:hover:bg-grey-600 dark:focus:ring-grey-900 mt-2 rounded-lg border-4 p-2 text-center text-xl font-medium hover:bg-green-500 hover:text-white focus:outline-none focus:ring-4 dark:hover:text-white"
+                  >
+                    Credit Card
+                  </button>
+                </Link>
+                <button
+                  onClick={() =>
+                    handleSubmitOrderForm(
+                      orderNumber1,
+                      allCartProductToString,
+                      firstname,
+                      lastname,
+                      phone,
+                      email,
+                      otherrequest,
+                      theItemsQuantity!,
+                      theAllProductsSum!,
+                      currentTime,
+                      role,
+                      currentCart!,
+                      fulladdress,
+                      userUpdateWithId!
+                    )
+                  }
+                  type="button"
+                  className="border-grey-600  text-black-600 focus:ring-grey-300 dark:border-grey-500 dark:text-grey-500 dark:hover:bg-grey-600 dark:focus:ring-grey-900 mt-2 rounded-lg border-4 p-2 text-center text-xl font-medium hover:bg-green-500 hover:text-white focus:outline-none focus:ring-4 dark:hover:text-white"
+                >
+                  At the place
+                </button>
               </div>
               <div className="flex justify-center ">
                 <Link to="/shoppingcart" type="button">

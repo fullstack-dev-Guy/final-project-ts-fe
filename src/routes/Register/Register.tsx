@@ -11,10 +11,6 @@ import { useAuth } from "../../context/AuthProvider";
 import { auth, db } from "../../lib/firebase";
 import { getDocId, userDb } from "../../types/firestore";
 
-//const passwordValidation = new RegExp(
-//  /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/
-//);
-
 const emailValidation = new RegExp(
   /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 );
@@ -22,8 +18,6 @@ const emailValidation = new RegExp(
 export default function Register() {
   const { handleSignUpUser, user } = useAuth();
 
-  //access to email -- console.log(auth.currentUser?.email);
-  // access to email verify -- console.log(auth.currentUser?.emailVerified);
   const [error, setError] = useState("");
   const [confirmError, setConfirmError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -36,7 +30,6 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [checkbox, setCheckBox] = useState(false);
-  console.log(checkbox);
 
   const navigate = useNavigate();
 
@@ -53,7 +46,6 @@ export default function Register() {
       }
     };
     const isOkDisplayName = checkDisplayName(displayName);
-    console.log(isOkDisplayName + "displayname");
 
     const checkEmail = (email: string) => {
       if (email === "") {
@@ -70,7 +62,6 @@ export default function Register() {
       }
     };
     const isOkEmail = checkEmail(email);
-    console.log(isOkEmail + "email");
 
     const checkPassword = (confirm: string, password: string) => {
       if (password === "") {
@@ -104,7 +95,6 @@ export default function Register() {
     };
 
     const isOkPassword = checkPassword(confirm, password);
-    console.log(isOkPassword + "password");
 
     const checkConfirm = (confirm: string, password: string) => {
       if (confirm === "") {
@@ -121,7 +111,6 @@ export default function Register() {
       }
     };
     const isOkConfirm = checkConfirm(confirm, password);
-    console.log(isOkConfirm + "confirm");
 
     const checkOkCheckBox = (checkbox: boolean) => {
       if (checkbox === false) {
@@ -134,7 +123,6 @@ export default function Register() {
     };
 
     const isOkCheckBox = checkOkCheckBox(checkbox);
-    console.log(isOkCheckBox + "chrckbox");
 
     if (
       isOkConfirm === true &&
@@ -144,7 +132,7 @@ export default function Register() {
       isOkCheckBox === true
     ) {
       const result = await handleSignUpUser(email, password, displayName);
-      console.log(result);
+
       if (!result.ok) {
         setError(
           "There was a problem with the sign up, please try again later"
@@ -152,19 +140,14 @@ export default function Register() {
       }
 
       if (result.ok) {
-        console.log("email not exists = ok");
-        console.log(
-          auth.currentUser?.emailVerified + " " + "email verified status"
-        );
-
-        // היה רצון לשמור את הססמה של המשתמש דבר שהוא לא בטיחותי ולעדכן אותה כאשר יבצע איפוס ססמה
+        // היה רצון לשמור את *** של המשתמש דבר שהוא לא בטיחותי ולעדכן אותה כאשר יבצע איפוס ססמה
         const getUserUID = auth.currentUser?.uid;
-        console.log(getUserUID);
+
         // שמירת משתמש בקולקשיין של userDb
         const collectionRef = collection(db, "userDb");
         const docRef = await addDoc(collectionRef, {
           email,
-          password,
+
           displayName,
           userId: getUserUID,
           UserDocId: "",
@@ -183,8 +166,7 @@ export default function Register() {
         }));
 
         const response = docs;
-        console.log(response);
-        console.log("up");
+
         // יצירת מערכים עבור כל : email userId id
         const getAllEmails = JSON.parse(JSON.stringify(response)).map(
           (doc: userDb) => doc.email
@@ -196,9 +178,6 @@ export default function Register() {
           (doc: getDocId) => doc.id
         );
 
-        console.log(onlyDocId);
-        console.log(getAllDocId);
-
         for (let i = 0; i < getAllEmails.length; i++) {
           if (
             getAllEmails[i] === email &&
@@ -208,16 +187,15 @@ export default function Register() {
 
             const docRef = doc(db, "userDb", UserDocId);
 
-            await updateDoc(docRef, { password, UserDocId });
-
-            console.log(UserDocId);
+            await updateDoc(docRef, { UserDocId });
           }
         }
         ///////////////////////////////////////////////////// update role from guest to user
         const cartInStorage = localStorage.getItem("cartID");
         if (auth.currentUser !== null && cartInStorage !== null) {
           const responseUpdateCartRole = await fetch(
-            "http://localhost:3000/routes/carts/" + cartInStorage,
+            "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+              cartInStorage,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -228,9 +206,8 @@ export default function Register() {
             }
           );
           const data = await responseUpdateCartRole.json();
-          console.log(data);
+
           //window.location.reload();
-          console.log(responseUpdateCartRole.ok);
 
           if (!responseUpdateCartRole.ok) {
             throw Error("could not complete the action");
@@ -239,24 +216,16 @@ export default function Register() {
         /////////////////////////////////////////////////////
         return navigate("/emailverification");
       } else {
-        console.log("email already exists");
-        console.log(
-          auth.currentUser?.emailVerified + " " + "email verified status"
-        );
         return navigate("/emailinuse");
       }
     }
   };
 
   return (
-    <div className="from-yellow-0 to-orange-0 relative mx-auto mt-20 h-full w-full max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-6 sm:mt-28 md:mt-28 lg:mt-28">
-      <div className="relative">
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/final-project-coffee-trailer.appspot.com/o/images%2FIMG-20230126-WA0008-sar2.jpg?alt=media&token=41792fd1-fb1c-4acf-b3c8-6e883aa0dad7"
-          className=" absolute h-full w-full object-cover mix-blend-overlay"
-        />
-        <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0 ">
-          <div className="to-amber-0 relative w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+    <div className="from-yellow-0 to-orange-0  mx-auto mt-48  max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-2 ">
+      <div className="">
+        <div className="mx-auto flex flex-col items-center justify-center px-4 py-4  lg:py-0 ">
+          <div className="to-amber-0  w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-center text-2xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 יצירת משתמש חדש
@@ -272,9 +241,9 @@ export default function Register() {
                 <div>
                   <label
                     htmlFor="fullname"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    className="mb-2 block text-center text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Full Name
+                    שם פרטי ושם משפחה
                   </label>
                   <input
                     onChange={(event) => setDisplayName(event.target.value)}
@@ -282,7 +251,7 @@ export default function Register() {
                     type="fullname"
                     name="fullname"
                     id="fullname"
-                    className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
+                    className="focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-center text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
                     placeholder="fullname"
                     //required
                   />
@@ -295,7 +264,7 @@ export default function Register() {
                     htmlFor="email"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Your email
+                    אימייל
                   </label>
                   <input
                     onChange={(event) => setEmail(event.target.value)}
@@ -316,7 +285,7 @@ export default function Register() {
                     htmlFor="password"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Password
+                    סיסמה
                   </label>
                   <input
                     onChange={(event) => setPassword(event.target.value)}
@@ -337,7 +306,7 @@ export default function Register() {
                     htmlFor="confirm-password"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Confirm password
+                    הקלד שוב את הסיסמה
                   </label>
                   <input
                     onChange={(event) => setConfirm(event.target.value)}
@@ -375,9 +344,9 @@ export default function Register() {
                   <div className="ml-3 text-sm">
                     <label
                       htmlFor="terms"
-                      className="font-light text-gray-500 dark:text-gray-300"
+                      className="text-black-800 dark:text-black-600 font-light"
                     >
-                      I accept the{" "}
+                      V יש לסמן{" "}
                     </label>
                   </div>
                 </div>
@@ -388,12 +357,12 @@ export default function Register() {
                   לחץ כאן ליצירת חשבון
                 </button>
                 <p className="text-black-500 dark:text-black-400 text-sm font-light">
-                  Already have an account?{" "}
+                  יש לך כבר חשבון ?{" "}
                   <NavLink
                     to="/tosignin"
-                    className="text-primary-600 dark:text-primary-500 text-lg font-medium hover:underline"
+                    className="text-primary-600 dark:text-primary-500 text-lg font-medium  underline-offset-1 hover:underline"
                   >
-                    Login here
+                    כניסה לחשבון
                   </NavLink>
                 </p>
               </form>

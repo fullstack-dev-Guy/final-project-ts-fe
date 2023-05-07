@@ -12,13 +12,11 @@ export default function ProductPage() {
   const product = useLoaderData() as MyFetchResponse<Product>;
   const { id } = useParams();
 
-  console.log({ id });
-
   let currentId: string = id!;
-  console.log(currentId);
+
   const navigate = useNavigate();
   return (
-    <div className="mx-auto mt-12 max-w-screen-2xl">
+    <div className="mx-auto mt-32 max-w-screen-2xl">
       {product.data ? (
         <section className="bg-white dark:bg-gray-900">
           <div className="mx-auto grid max-w-screen-xl p-8 lg:grid-cols-12 lg:gap-8 lg:py-16 xl:gap-0">
@@ -78,7 +76,8 @@ export default function ProductPage() {
 export async function ProductLoader({ params }: LoaderFunctionArgs) {
   try {
     const response = await fetch(
-      "http://localhost:3000/routes/products/" + params.id
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/products/" +
+        params.id
     );
     const data = await response.json();
     if (!response.ok) {

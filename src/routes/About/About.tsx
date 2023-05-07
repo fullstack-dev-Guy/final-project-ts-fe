@@ -2,46 +2,53 @@ import { Link } from "react-router-dom";
 
 export default function About() {
   return (
-    <div>
-            <div>
-            <section className="bg-white dark:bg-gray-900">
-              <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-                  <div className="mx-auto max-w-screen-sm text-center lg:mb-6 mb-6">
-                      <h2 className="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">אודות שרקפה</h2>
-                      <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque repellendus,
-                         adipisci ducimus sunt est ad animi odio consectetur veritatis quis.
-                          Officia voluptatibus similique eaque dolorem atque. Numquam nobis ad est tempore aspernatur.
-                           Voluptate error dolorem architecto placeat voluptatem aperiam fuga est ad laudantium ipsa tempora,
-                            fugiat, sunt eos voluptas at ab quibusdam vitae saepe labore accusantium incidunt dolores.
-                             Voluptas vel impedit repellendus sapiente laboriosam illo pariatur quibusdam odit ut.
-                              Animi reprehenderit hic a ab minima labore esse, quis at nesciunt blanditiis excepturi minus.
-                               Voluptates itaque, aperiam inventore dolorum nesciunt consequatur tempora voluptatem molestiae debitis praesentium! Dolore dolorem nostrum necessitatibus a nam mollitia obcaecati consequatur error numquam impedit qui odio,
-                                consectetur tempore praesentium in, incidunt quisquam eum libero! Sit non amet libero perspiciatis repudiandae modi nesciunt quod harum. Est earum ipsam sit. Ad quaerat quas veritatis,
-                                 corporis sequi tempore eveniet minima. Qui beatae quidem nobis,
-                                  commodi laboriosam dolorum odio eveniet distinctio molestias,
-                                   vitae sint? Praesentium omnis voluptatibus delectus illum maxime,
-                                    et quae perferendis veniam fugit impedit, enim odio,
-                                     libero aliquid esse! Id alias libero vitae, odio expedita iure provident.
-                                      Eos atque laboriosam mollitia reiciendis ex,
-                         at aut quia commodi expedita modi quo ad, magni illo praesentium,
-                          nostrum aliquam! Porro, qui iste.
-                        </p>
-                  </div> 
-                  <div className="  flex justify-center mb-2">
-                    <Link to="/">
-                        <button role="button" className=" bg-yellow-200 hover:bg-yellow-300 active:bg-yellow-500 focus:outline-none focus:ring focus:ring-violet-300  text-violet-700  border border-gray-700 p-2 font-semibold text-base dark:text-white rounded-lg  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">חזרה לדף הבית</button>
-                    </Link>
-                  </div>
-
-                  <div className="flex-auto">
-                  
-                  
-                 
-                  </div>  
+    <html dir="rtl" lang="he">
+      <head>
+        <meta charSet="UTF-8" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre&display=swap"
+        />
+      </head>
+      <div className="mt-44">
+        <div>
+          <section className="bg-white dark:bg-gray-900">
+            <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-16 lg:px-6">
+              <div className="mx-auto mb-6 max-w-screen-sm text-center lg:mb-6">
+                <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white lg:text-4xl">
+                  אודות שרקפה
+                </h2>
+                <p className="font-light text-gray-500 dark:text-gray-400 sm:text-xl">
+                  עגלת שרקפה הוקמה בשנת 2022 במושב מאור למען קהילת חובבי הקפה
+                  המשובח ומחפשי הפינה השקטה כדי לקחת נשימה ולהרגע ממרוץ החיים.
+                  האתר עצמו הוא בעצם פרוייקט משולב המשלב שיתוף פעולה בין שרקפה
+                  לבין פרוייקט גמר בקורס FULL-STACK. בפרוייקט עצמו נדרשו
+                  מאפיינים מסויימים עבור האתר לדוגמא דף המוצרים שלנו או דף צור
+                  קשר וכ"ד .... שיתוף הפעולה איפשר בעצם הכנסה והצגה של מוצרים
+                  שבאמת נמכרים בעגלה ולדמות ביצוע הזמנה או אפילו להירשם כמשתמש
+                  ולהיות חבר שיכול להנות מהטבות . האתר מאפשר ללקוחות רשומים
+                  לרשום בלוג או לרשום סתם על חווית העצירה בשרקפה , ובנוסף מאפשר
+                  גם לערוך או למחוק אותו. אנחנו מאוד מקווים שתהנו מהחוויה הפיזית
+                  במקום אצלנו וגם מהחוויה האינטרנטית. בכל בעיה ניתן ליצור קשר
+                  ונשתדל לענות במהרה. נשמח לראותכם אצלנו בעגלה. בברכה שרקפה
+                </p>
               </div>
-            </section>
-    </div>
-    </div>
-  )
+              <div className="  mb-2 flex justify-center">
+                <Link to="/">
+                  <button
+                    role="button"
+                    className=" rounded-lg border border-gray-700 bg-yellow-200 p-2 text-base  font-semibold  text-violet-700 hover:bg-yellow-300 focus:outline-none focus:ring focus:ring-violet-300 active:bg-yellow-500 dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                  >
+                    חזרה לדף הבית
+                  </button>
+                </Link>
+              </div>
+
+              <div className="flex-auto"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </html>
+  );
 }

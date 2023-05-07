@@ -9,8 +9,7 @@ export default function ToSignIn() {
   const { handleSignInUser, handleSigInWithGoogle } = useAuth();
   const { user } = useAuth();
   const userAuth = auth;
-  console.log(userAuth);
-  console.log("begining");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,11 +19,6 @@ export default function ToSignIn() {
   const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
-
-  //  const { id } = useParams();
-  //
-  //  let currentId: string = id!;
-  //  console.log(currentId);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -39,7 +33,6 @@ export default function ToSignIn() {
       }
     };
     const isOkEmail = checkEmail(email);
-    console.log(isOkEmail + "email");
 
     const checkPassword = (password: string) => {
       if (password === "") {
@@ -52,22 +45,21 @@ export default function ToSignIn() {
     };
 
     const isOkPassword = checkPassword(password);
-    console.log(isOkPassword + "password");
 
     if (checkbox === false) {
       setCheckedError("Tick a V");
       setError("אמצעי ההתחברות לא תקינים");
-      console.log(checkbox + " " + "forgot password checkbox status");
+
       return false;
       // return navigate("/forgotpassword");
     } else {
       setCheckedError("");
-      console.log(checkbox + " " + "forgot password checkbox status");
     }
 
     if (isOkEmail === true && checkbox === true && isOkPassword === true) {
       await handleSignInUser(email, password);
-
+      sessionStorage.removeItem("itemquantity");
+      sessionStorage.removeItem("productsSum");
       const collectionRef = collection(db, "userDb");
       const querySnapshot = await getDocs(collectionRef);
       const docs = querySnapshot.docs.map((doc) => ({
@@ -80,15 +72,16 @@ export default function ToSignIn() {
       }));
 
       const response = docs;
-      console.log(response);
-      console.log("up");
+
       ///////////////////////////////////////////////////// update role from guest to user
       // אם יש למשתמש סל מהתחברות קודמת נציג לו את הסל שלו מהתחברות קודמת ולא ניצור לו סל חדש
       let storageCartStatus: string | null = localStorage.getItem("cartID");
+
       if (userAuth) {
-        const getAllCarts1 = await fetch("http://localhost:3000/routes/carts"); //GET
+        const getAllCarts1 = await fetch(
+          "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts"
+        ); //GET
         const dataGetAllCarts1 = await getAllCarts1.json();
-        console.log(getAllCarts1.ok);
 
         if (!getAllCarts1.ok) {
           throw Error("could not fetch the data");
@@ -100,8 +93,6 @@ export default function ToSignIn() {
         const getAllcartID = JSON.parse(JSON.stringify(dataGetAllCarts1)).map(
           (doc: Cart) => doc.id
         );
-        console.log("getAlluserID");
-        console.log(getAlluserIDfromCart);
 
         for (let i = 0; i < getAllcartID.length; i++) {
           if (auth.currentUser?.uid === getAlluserIDfromCart[i]) {
@@ -113,7 +104,8 @@ export default function ToSignIn() {
             if (guestCart !== cartBelongToCurrentUser) {
               // במידה ומשתמש יוצא מהדפדפן וחוזר אליו נוצר מצב שלמשתמש יש סל קניות באיחסון המקומי וגם בבבסיס הנתונים למרות שהדפדפן עולה הוא הפך לאורח . בהתחברות נוספת נוצרה בעיה שהוא חשב שהסל קניות הנוכחי שייך לאורח ולכן מחק אותו מיד בהתחברות דבר שיצר בעייה ברינדור של סל הקניות ובנוסף גם מחק את סל הקניות בבסיס הנתונים
               var responseDeleteCart = await fetch(
-                "http://localhost:3000/routes/carts/" + guestCart,
+                "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+                  guestCart,
                 {
                   method: "DELETE",
                   headers: { "Content-Type": "application/json" },
@@ -135,7 +127,8 @@ export default function ToSignIn() {
       const cartInStorage = localStorage.getItem("cartID");
       if (userAuth && cartInStorage !== null) {
         const responseUpdateCartRole = await fetch(
-          "http://localhost:3000/routes/carts/" + cartInStorage,
+          "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+            cartInStorage,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -149,9 +142,6 @@ export default function ToSignIn() {
           }
         );
         const data = await responseUpdateCartRole.json();
-        console.log(data);
-        //  window.location.reload();
-        console.log(responseUpdateCartRole.ok);
 
         if (!responseUpdateCartRole.ok) {
           throw Error("could not complete the action");
@@ -169,9 +159,6 @@ export default function ToSignIn() {
         (doc: getDocId) => doc.id
       );
 
-      console.log(onlyDocId);
-      console.log(getAllDocId);
-
       for (let i = 0; i < getAllEmails.length; i++) {
         if (
           getAllEmails[i] === email &&
@@ -182,8 +169,6 @@ export default function ToSignIn() {
           const docRef = doc(db, "userDb", UserDocId);
 
           await updateDoc(docRef, { password, UserDocId });
-
-          console.log(UserDocId);
         }
       }
       if (auth.currentUser) {
@@ -197,14 +182,10 @@ export default function ToSignIn() {
   }
 
   return (
-    <div className="from-yellow-0 to-orange-0 relative mx-auto mt-20 h-full w-full max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-6 sm:mt-28 md:mt-28 lg:mt-28">
-      <div className="relative">
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/final-project-coffee-trailer.appspot.com/o/images%2FIMG-20230126-WA0008-sar2.jpg?alt=media&token=41792fd1-fb1c-4acf-b3c8-6e883aa0dad7"
-          className=" absolute h-full w-full object-cover mix-blend-overlay"
-        />
-        <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0 ">
-          <div className="to-amber-0 relative w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+    <div className="from-yellow-0 to-orange-0  mx-auto mt-48  max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-2 ">
+      <div className="">
+        <div className="mx-auto flex flex-col items-center justify-center px-4 py-4  lg:py-0 ">
+          <div className="to-amber-0  w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 התחברות
@@ -246,7 +227,7 @@ export default function ToSignIn() {
                     htmlFor="email"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Your email
+                    אימייל
                   </label>
                   <input
                     onChange={(event) => setEmail(event.target.value)}
@@ -266,7 +247,7 @@ export default function ToSignIn() {
                     htmlFor="password"
                     className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Password
+                    סיסמה
                   </label>
                   <input
                     onChange={(event) => setPassword(event.target.value)}
@@ -295,16 +276,16 @@ export default function ToSignIn() {
                       />
                     </div>
                     {checkedError ? (
-                      <p className="text-xs font-medium text-red-700">
+                      <p className="ml-2 text-xs font-medium text-red-700">
                         {checkedError}
                       </p>
                     ) : null}
-                    <div className="ml-3 text-sm">
+                    <div className="mr-2 text-sm">
                       <label
                         htmlFor="remember"
-                        className="text-black-600 dark:text-gray-300"
+                        className="text-black-600 ml-2 dark:text-gray-300"
                       >
-                        Remember me
+                        V יש לסמן
                       </label>
                     </div>
                   </div>
@@ -323,12 +304,12 @@ export default function ToSignIn() {
                   כניסה
                 </button>
                 <p className="text-black-700 text-sm font-light dark:text-gray-400">
-                  Don’t have an account yet?{" "}
+                  יש לך כבר משתמש ?{" "}
                   <NavLink
                     to="/register"
                     className="text-primary-600 dark:text-primary-500 text-lg font-medium hover:underline"
                   >
-                    Sign up
+                    צור משתמש כאן
                   </NavLink>
                 </p>
               </form>

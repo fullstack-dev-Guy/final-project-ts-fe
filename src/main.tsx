@@ -46,6 +46,29 @@ import { OrderPage } from "./components/OrderPage";
 import { SignInIndicationPage } from "./components/SignInIndicationPage";
 import { SignInMassageError } from "./components/SignInMassageError";
 import { OrderNumberPage } from "./components/OrderNumberPage";
+import { MyAllBlogs } from "./components/MyAllBlogs";
+import { BlogMangment } from "./components/BlogMangment";
+import UserMenue from "./components/common/UserMenue/UserMenue";
+import { DeleteBlog2 } from "./components/DeleteBlog2";
+import { Header } from "./components/common/Header";
+import { Test1 } from "./components/Test1";
+import { userRoleLoader } from "./components/Test1/Test1";
+import { OrderManagement } from "./components/OrderManagement";
+import { cartArchivesAndOrderLoader } from "./components/OrderManagement/OrderManagement";
+import { ShowProductsForOrder } from "./components/ShowProductsForOrder";
+import { ShowAllOrderDetails } from "./components/ShowAllOrderDetails";
+import { UpdateStatusWarning } from "./components/UpdateStatusWarning";
+import { DeleteCartArchivesAndOrder } from "./components/DeleteCartArchivesAndOrder";
+import { MyOrderHistory } from "./components/MyOrderHistory";
+import { ShowProductsForOrderHistory } from "./components/ShowProductsForOrderHistory";
+import { ShowAllOrderDetailsMyHistory } from "./components/ShowAllOrderDetailsMyHistory";
+import { ManagementUsers } from "./components/ManagementUsers";
+import { handleManagementUser } from "./components/ManagementUsers/ManagementUsers";
+import { ContactForm } from "./components/ContactForm";
+import { ContactMassage } from "./components/ContactMassage";
+import { DeleteProfileSuccess } from "./components/DeleteProfileSuccess";
+import { DeleteProfileFail } from "./components/DeleteProfileFail";
+import { NotActiveMassage } from "./components/NotActiveMassage";
 
 const router = createBrowserRouter([
   {
@@ -54,24 +77,35 @@ const router = createBrowserRouter([
     loader: cartLoader,
   },
   {
+    path: "/signinindicationpage",
+    element: <SignInIndicationPage />,
+  },
+  {
+    path: "deleteprofilesuccess",
+    element: <DeleteProfileSuccess />,
+  },
+  {
     path: "/",
     element: <Root />,
     children: [
       {
+        path: "/test1",
+        element: <Test1 />,
+        loader: userRoleLoader,
+      },
+      {
         path: "/",
         element: <Home />,
       },
+
       {
         path: "/register",
         element: <Register />,
       },
+
       {
         path: "/tosignin",
         element: <ToSignIn />,
-      },
-      {
-        path: "/signinindicationpage",
-        element: <SignInIndicationPage />,
       },
       {
         path: "/signinmassageerror",
@@ -86,6 +120,33 @@ const router = createBrowserRouter([
         element: <Menu />,
       },
       {
+        path: "contactform",
+        element: <ContactForm />,
+      },
+      {
+        path: "contactmassage",
+        element: <ContactMassage />,
+      },
+
+      {
+        path: "deleteprofilefail",
+        element: <DeleteProfileFail />,
+      },
+
+      {
+        path: "header/usermenue",
+        element: (
+          <ProtectedRoute>
+            <UserMenue />
+          </ProtectedRoute>
+        ),
+        loader: userRoleLoader,
+      },
+      {
+        path: "header",
+        element: <Header />,
+      },
+      {
         path: "openingtimes",
         element: <OpeningTimes />,
       },
@@ -96,6 +157,11 @@ const router = createBrowserRouter([
       {
         path: "blogs",
         element: <Blogs />,
+        loader: blogsLoader,
+      },
+      {
+        path: "myallblogs",
+        element: <MyAllBlogs />,
         loader: blogsLoader,
         children: [
           {
@@ -111,10 +177,24 @@ const router = createBrowserRouter([
       {
         path: "blogs/blogpage/:id",
         element: <BlogPage />,
+        loader: userRoleLoader,
       },
       {
         path: "blogs/editblog/:id",
         element: <EditBlog />,
+        loader: blogsLoader,
+      },
+      {
+        path: "blogmangment",
+        element: <BlogMangment />,
+        loader: blogsLoader,
+
+        children: [
+          {
+            path: "deleteblog2/:id",
+            element: <DeleteBlog2 />,
+          },
+        ],
       },
       {
         path: "emailverification",
@@ -175,6 +255,7 @@ const router = createBrowserRouter([
       {
         path: "shoppingcart",
         element: <ShoppingCart />,
+
         loader: cartLoader,
       },
       {
@@ -182,11 +263,69 @@ const router = createBrowserRouter([
         element: <ShoppingCartDummy />,
       },
       {
+        path: "notactivemassage",
+        element: <NotActiveMassage />,
+      },
+
+      {
         path: "orderpage",
         element: <OrderPage />,
         loader: cartLoader,
       },
+      {
+        path: "managementusers",
+        element: <ManagementUsers />,
+        loader: handleManagementUser,
+      },
 
+      {
+        path: "myorderhistory",
+        element: <MyOrderHistory />,
+        loader: cartArchivesAndOrderLoader,
+        children: [
+          {
+            path: "showproductsforOrderhistory/:id",
+            element: <ShowProductsForOrderHistory />,
+            loader: cartArchivesAndOrderLoader,
+          },
+          {
+            path: "showallorderdetailsmyhistory/:id",
+            element: <ShowAllOrderDetailsMyHistory />,
+            loader: cartArchivesAndOrderLoader,
+          },
+        ],
+      },
+      {
+        path: "ordermanagement",
+        element: (
+          <ProtectedRoute>
+            <OrderManagement />,
+          </ProtectedRoute>
+        ),
+        loader: cartArchivesAndOrderLoader,
+        children: [
+          {
+            path: "showproductsfororder/:id",
+            element: <ShowProductsForOrder />,
+            loader: cartArchivesAndOrderLoader,
+          },
+          {
+            path: "showallorderdetails/:id",
+            element: <ShowAllOrderDetails />,
+            loader: cartArchivesAndOrderLoader,
+          },
+          {
+            path: "updatestatuswarning/:id",
+            element: <UpdateStatusWarning />,
+            loader: cartArchivesAndOrderLoader,
+          },
+          {
+            path: "deletecartarchivesandorder/:id",
+            element: <DeleteCartArchivesAndOrder />,
+            loader: cartArchivesAndOrderLoader,
+          },
+        ],
+      },
       {
         path: "dashboard",
         element: (

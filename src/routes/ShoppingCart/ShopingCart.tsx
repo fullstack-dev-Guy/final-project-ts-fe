@@ -1,35 +1,14 @@
-import { Link, redirect, useLoaderData, useParams } from "react-router-dom";
+import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { Cart, MyFetchResponse, Product } from "../../types/firestore";
-import { auth } from "../../lib/firebase";
+
+import { useAuth } from "../../context/AuthProvider";
 
 export default function ShoppingCart() {
+  const navigate = useNavigate();
   var currentCart = localStorage.getItem("cartID");
-  //const { user } = useAuth(); זה יוצר בעיה ברינדור  של הסל
-  let authIndication = auth.currentUser;
+  const { user } = useAuth(); // זה יוצר בעיה ברינדור  של הסל
 
   const carts = useLoaderData() as MyFetchResponse<Cart[]>;
-  console.log("authIndication");
-  console.log(authIndication);
-  console.log("carts");
-  console.log(carts);
-  console.log("currentCart");
-  console.log(currentCart);
-
-  const arryForCartId = JSON.parse(JSON.stringify(carts.data)).map(
-    (x: Cart) => x.id
-  );
-  console.log(arryForCartId);
-
-  const arryForCartProducts = JSON.parse(JSON.stringify(carts.data)).map(
-    (x: Cart) => x.products
-  );
-  console.log(arryForCartProducts);
-
-  const arryForCartUserID = JSON.parse(JSON.stringify(carts.data)).map(
-    (x: Cart) => x.userID
-  );
-
-  console.log(arryForCartUserID);
 
   const currentCartDetails = carts.data?.filter((x) => x.id === currentCart); //i got the cart object with all the details
 
@@ -39,29 +18,20 @@ export default function ShoppingCart() {
   } else {
     priceDiscount = "no";
   }
-  console.log("currentCartDetails");
-  console.log(currentCartDetails);
+
   var getAllProductsIdFromCurrentCart = currentCartDetails?.map(
     (x) => x.products
   );
-  console.log("getAllProductsIdFromCurrentCart");
-  console.log(getAllProductsIdFromCurrentCart);
-  console.log(getAllProductsIdFromCurrentCart![0]);
 
   let productsArry: string[] = getAllProductsIdFromCurrentCart![0].map(
     (product) => product
   );
-  console.log("productsArry");
-  console.log(productsArry);
 
   const products = useLoaderData() as MyFetchResponse<Product>;
-  console.log("products");
-  console.log(products);
+
   var arryForGettingAllProducts = JSON.parse(
     JSON.stringify(products.data1)
   ).map((x: Product) => x);
-  console.log("arryForGettingAllProducts");
-  console.log(arryForGettingAllProducts);
 
   let getProductDetails: Product[] = [];
 
@@ -72,17 +42,14 @@ export default function ShoppingCart() {
       }
     }
   }
-  console.log("getProductDetails");
-  console.log(getProductDetails); // זה מערך של מוצרים בסל עם כל המידע עליהם
+
+  // console.log(getProductDetails); // זה מערך של מוצרים בסל עם כל המידע עליהם
 
   ///////////////////////////////////////////////// חישוב הסכום של המוצרים לפי מחיר ולפי משתמש רשום שמקבל הנחה
 
   let getAllCartProductPrice = JSON.parse(
     JSON.stringify(getProductDetails)
   ).map((x: Product) => x.productprice);
-
-  console.log("getAllCartProductPrice");
-  console.log(getAllCartProductPrice);
 
   let productsSum: number = 0;
   if (currentCartDetails![0].userID !== " ") {
@@ -91,15 +58,11 @@ export default function ShoppingCart() {
       productsSum = productsSum + temp;
     }
     productsSum = productsSum - productsSum * 0.05;
-    console.log("productsSum");
-    console.log(productsSum);
   } else {
     for (let i = 0; i < getAllCartProductPrice.length; i++) {
       let temp: number = Number(getAllCartProductPrice[i]);
       productsSum = productsSum + temp;
     }
-    console.log("productsSum");
-    console.log(productsSum);
   }
   let newproductsSum: string = productsSum.toString();
   sessionStorage.setItem("productsSum", newproductsSum);
@@ -109,14 +72,11 @@ export default function ShoppingCart() {
     getProductDetails.includes(x)
   );
 
-  console.log("getProductDetails1");
-  console.log(getProductDetails1); // זה מערך של מוצרים עם כל המידע עליהם
+  // console.log(getProductDetails1); // זה מערך של מוצרים עם כל המידע עליהם
 
   var allProductsIdArry: string[] = JSON.parse(
     JSON.stringify(arryForGettingAllProducts)
   ).map((x: Product) => x.id);
-  console.log("allProductsIdArry");
-  console.log(allProductsIdArry);
 
   let quantityOfProductsArry: number[] = []; // כמה פעמים מופיע מוצר במערך ? לכאן נכניס את מספר הפעמים שמופיע
   let cartProductCorolationtoQuantity: string[] = [];
@@ -138,20 +98,19 @@ export default function ShoppingCart() {
   cartProductCorolationtoQuantity = cartProductCorolationtoQuantity.filter(
     (e) => String(e).trim()
   );
-  console.log("quantityOfProductsAryy");
-  console.log(quantityOfProductsArry); //סכום המערך יתן את כמות המוצרים הכללית בסל
-  console.log("cartProductCorolationtoQuantity");
-  console.log(cartProductCorolationtoQuantity);
+
+  // console.log(quantityOfProductsArry); //סכום המערך יתן את כמות המוצרים הכללית בסל
+
   ///////////////////////////////////////////////////////////////// חישוב כמות הפריטים בסל
   let howManyProducts: number = 0;
   for (let i = 0; i < quantityOfProductsArry.length; i++) {
     let temp: number = quantityOfProductsArry[i];
     howManyProducts = howManyProducts + temp;
   }
-  console.log("howManyProducts");
-  console.log(howManyProducts);
+
   let newhowManyProducts: string = howManyProducts.toString();
   sessionStorage.setItem("itemquantity", newhowManyProducts);
+
   //////////////////////////////////////////////////////////////////
   // מעדכן את המוצרים בסל הקניות בכמות החדשה
   for (let i = 0; i < getProductDetails1.length; i++) {
@@ -159,9 +118,13 @@ export default function ShoppingCart() {
       getProductDetails1[i].quantity = quantityOfProductsArry[i];
     }
   }
-  console.log("getProductDetails1");
-  console.log(getProductDetails1);
+
   ///////////////////////////////////////////////////////////////////////////////הכנה לפני שמירה באיחסון סשן
+  function reload() {
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   async function removeOneProducrFromCart(
@@ -169,13 +132,6 @@ export default function ShoppingCart() {
     currentCart: string,
     productsArry: string[]
   ) {
-    console.log("currentCart");
-    console.log(currentCart);
-    console.log("productId");
-    console.log(productId);
-    console.log("productsArry");
-    console.log(productsArry);
-
     let temp = productsArry.find((x) => x === productId);
     let index = productsArry.indexOf(temp!);
 
@@ -184,10 +140,6 @@ export default function ShoppingCart() {
       var resultProductArryAfterTrim = productsArry.filter(
         (x) => x.trim().length > 0
       );
-      console.log("resultProductArryAfterTrim");
-      console.log(resultProductArryAfterTrim);
-      console.log("index ");
-      console.log(index);
     } else {
       return;
     }
@@ -197,12 +149,11 @@ export default function ShoppingCart() {
     //  console.log(arr);
     //    const words = ['spray', 'limit', 'elite', 'exuberant', ' ', ''];
     //    const result = words.filter(word => word.trim().length > 0); //  מנקה מקומות ריקים במערך
-    console.log("index ");
-    console.log(index);
 
     try {
       const responseUpdateCartproducts = await fetch(
-        "http://localhost:3000/routes/carts/" + currentCart,
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+          currentCart,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -219,8 +170,6 @@ export default function ShoppingCart() {
       const data = await responseUpdateCartproducts.json();
 
       window.location.reload();
-      console.log(responseUpdateCartproducts.ok + "DELETPRODUCT");
-      console.log(data);
 
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
@@ -233,14 +182,10 @@ export default function ShoppingCart() {
   }
   /////////////////////////////////////////////////////////////////
   async function addOneProducrToCart(productId: string, currentCart: string) {
-    console.log("currentCart");
-    console.log(currentCart);
-    console.log("productId");
-    console.log(productId);
-
     try {
       const responseUpdateCartproducts = await fetch(
-        "http://localhost:3000/routes/carts/" + currentCart,
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+          currentCart,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -254,13 +199,12 @@ export default function ShoppingCart() {
       const data = await responseUpdateCartproducts.json();
 
       window.location.reload();
-      console.log(responseUpdateCartproducts.ok + "addProduct");
-      console.log(data);
 
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
       }
-      return redirect("/shoppingcart");
+
+      return navigate("/shoppingcart");
     } catch (error) {
       console.error(error);
       return { status: "error", data: null, message: (error as Error).message };
@@ -270,7 +214,8 @@ export default function ShoppingCart() {
   async function clearTheCartFromAllProducts(currentCart: string) {
     try {
       const responseUpdateCartproducts = await fetch(
-        "http://localhost:3000/routes/carts/" + currentCart,
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+          currentCart,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -282,10 +227,6 @@ export default function ShoppingCart() {
       const data = await responseUpdateCartproducts.json();
 
       window.location.reload();
-      console.log(
-        responseUpdateCartproducts.ok + "clear all Products from cart"
-      );
-      console.log(data);
 
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
@@ -304,36 +245,21 @@ export default function ShoppingCart() {
   ) {
     let newProductAryyAfterFilter = productsArry.filter((x) => x !== productId);
 
-    console.log("newProductAryyAfterFilter");
-    console.log(newProductAryyAfterFilter);
-
-    //  let arr = [1, 2, 3, 4, 5, 3]; // מזהה ומוציא את כל האלמנטים שהם זהים כלומר מוציא כפילויות כולל הערך עצמו
-    //  arr = arr.filter((item) => item !== value);
-    //  console.log(arr);
-    //    const words = ['spray', 'limit', 'elite', 'exuberant', ' ', ''];
-    //    const result = words.filter(word => word.trim().length > 0); //  מנקה מקומות ריקים במערך
-
     try {
       const responseUpdateCartproducts = await fetch(
-        "http://localhost:3000/routes/carts/" + currentCart,
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+          currentCart,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             products: newProductAryyAfterFilter,
-            //    role: "user",
-            //    createdAt: "2023-04-13T17:50:20.011Z",
-            //    updatedAt: "2023-04-14T12:38:01.164Z",
-            //    userID: "ry8yCSrJtFb1hIxxPCKgERcei1u1",
-            //    ses: "",
           }),
         }
       );
       const data = await responseUpdateCartproducts.json();
 
       window.location.reload();
-      console.log(responseUpdateCartproducts.ok + "DELETPRODUCT");
-      console.log(data);
 
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
@@ -345,9 +271,9 @@ export default function ShoppingCart() {
     }
   }
   return (
-    <div>
+    <div className="mt-44 mb-40">
       {currentCart === null ? (
-        <section className="bg-gray-50 py-3 dark:bg-gray-900 sm:py-5">
+        <section className=" bg-gray-50 py-3 dark:bg-gray-900 sm:py-5">
           <div className="mx-auto max-w-screen-2xl px-4 lg:px-12">
             <div className="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
               <div className="flex flex-col space-y-3 px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
@@ -471,6 +397,34 @@ export default function ShoppingCart() {
                 </div>
 
                 <div className="flex flex-shrink-0 flex-col space-y-3 md:flex-row md:items-center md:space-y-0 md:space-x-3 lg:justify-end">
+                  <Link
+                    to="../shoppingcart"
+                    className=" flex items-center"
+                    role="button"
+                  >
+                    <button
+                      onClick={() => reload()}
+                      type="button"
+                      className="hover:text-primary-700 flex flex-shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+                    >
+                      <svg
+                        className="mr-2 h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                        />
+                      </svg>
+                      עדכון הסל
+                    </button>
+                  </Link>
                   {howManyProducts === 0 ? (
                     <Link to="/shoppingcartdummy" type="button">
                       <button
@@ -486,7 +440,7 @@ export default function ShoppingCart() {
                         type="button"
                         className="focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 flex items-center justify-center rounded-lg bg-blue-600 bg-blue-700 px-4 py-2 text-sm font-medium text-white text-white hover:text-white focus:outline-none focus:ring-4"
                       >
-                        בצע הזמנה
+                        ביצוע הזמנה
                       </button>
                     </Link>
                   )}
@@ -649,16 +603,18 @@ export default function ShoppingCart() {
 
 export async function cartLoader() {
   try {
-    const response = await fetch("http://localhost:3000/routes/carts");
+    const response = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts"
+    );
     const data = await response.json();
-    console.log(response.ok);
 
     if (!response.ok) {
       throw Error("could not fetch the data");
     }
-    const response1 = await fetch("http://localhost:3000/routes/products");
+    const response1 = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/products"
+    );
     const data1 = await response1.json();
-    console.log(response1.ok);
 
     if (!response.ok) {
       throw Error("could not fetch the data");
@@ -667,7 +623,7 @@ export async function cartLoader() {
     return { data, data1, status: "success" };
   } catch (error) {
     console.error(error);
-    console.log("error-catch");
+
     return { status: "error", message: (error as Error).message, data: null };
   }
 }

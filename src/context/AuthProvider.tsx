@@ -5,12 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  setPersistence,
-  browserSessionPersistence,
-  inMemoryPersistence,
-  signInWithRedirect,
-} from "firebase/auth";
+import { setPersistence, browserSessionPersistence } from "firebase/auth";
 
 import {
   createUserWithEmailAndPassword,
@@ -81,20 +76,21 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       }
       //////////////////////////////////////
 
-      const response1 = await fetch("http://localhost:3000/routes/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          displayName: displayName,
-          hash: "",
-          role: "user",
-          email: email,
-          orders: [],
-          firebaseUserID: auth.currentUser?.uid,
-        }),
-      });
-      console.log(response1.ok);
-      //window.location.reload();
+      const response1 = await fetch(
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            displayName: displayName,
+            hash: "",
+            role: "user",
+            email: email,
+            orders: [],
+            firebaseUserID: auth.currentUser?.uid,
+          }),
+        }
+      );
 
       if (!response1.ok) {
         throw Error("could not complete the action");
@@ -107,6 +103,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       return { ok: false };
     }
   };
+
   const handleSignInUser = async (email: string, password: string) => {
     try {
       const auth = getAuth();
@@ -155,6 +152,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     //////////////////////////////////////////////////// localstorage clear
 
     localStorage.removeItem("cartID");
+    sessionStorage.removeItem("itemquantity");
+    sessionStorage.removeItem("productsSum");
+
     ////////////////////////////////////////////////////
 
     try {
@@ -181,13 +181,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const getAllDocId1 = JSON.parse(JSON.stringify(onlyDocId1)).map(
         (doc: getDocId) => doc.id
       );
-      console.log("getAllDocId1 ");
-      console.log(getAllDocId1);
+
       /////////////////////////////////
 
       ///////////////////////////////////
       await signInWithPopup(auth, provider);
-      console.log(auth.currentUser?.email);
 
       // שמירת משתמש בקולקשיין של userDb
       const salt = Math.floor(Math.random() * 1000000000) + "Aa";
@@ -223,23 +221,16 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         (doc: userDb) => doc.email
       );
 
-      console.log("getAllDocId2");
-      console.log(getAllDocId2);
-      console.log("getAllUserEmail");
-      console.log(getAllUserEmail);
-
       let UserDocId: string = getAllDocId2.filter(
         (x: number) => !getAllDocId1.includes(x)
       );
-      console.log("UserDocId");
-      console.log(UserDocId);
+
       //בליחצה נוספת על התחברות עם גוגל נוצר משתמש חדש - אם נוצר משתמש חדש הוא יהיה עם  אימייל שכבר נוצר בהתחברות הראשונה ולכן נבדוק אם הוא קיים במערך של אימיילים ואם קיים נמחוק אותו לפי איי די חדש שנוצר
       const emailArryResult = getAllUserEmail.includes(auth.currentUser?.email);
       let emailCounter = 0;
       for (let j = 0; j < getAllUserEmail.length; j++) {
         if (getAllUserEmail[j] === auth.currentUser?.email) {
           emailCounter++;
-          console.log(emailCounter);
         }
 
         if (emailCounter === 2) {
@@ -248,10 +239,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           );
 
           await deleteDoc(doc(db, "userDb", UserDocIdtoDelete[0]));
-          console.log("emailArryResult-includes");
-          console.log(emailArryResult);
-          console.log("UserDocIdtoDelete");
-          console.log(UserDocIdtoDelete[0]);
         }
       }
       try {
@@ -262,8 +249,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
             const docRef = doc(db, "userDb", UserDocId);
 
             await updateDoc(docRef, { UserDocId });
-
-            console.log(UserDocId);
           }
         }
       } catch (error) {
@@ -273,9 +258,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       /////////////////////////////////////////////////////
       ///////////////////////////////////////////////////
       if (auth) {
-        const getAllCarts1 = await fetch("http://localhost:3000/routes/carts"); //GET
+        const getAllCarts1 = await fetch(
+          "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts"
+        ); //GET
         const dataGetAllCarts1 = await getAllCarts1.json();
-        console.log(getAllCarts1.ok);
 
         if (!getAllCarts1.ok) {
           throw Error("could not fetch the data");
@@ -287,18 +273,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         const getAllcartID = JSON.parse(JSON.stringify(dataGetAllCarts1)).map(
           (doc: Cart) => doc.id
         );
-        console.log("getAlluserID");
-        console.log(getAlluserIDfromCart);
+
         for (let i = 0; i < getAllcartID.length; i++) {
-          if (
-            auth.currentUser?.uid === getAlluserIDfromCart[i] &&
-            getAlluserIDfromCart[i] !== " "
-          ) {
+          if (auth.currentUser?.uid === getAlluserIDfromCart[i]) {
             var cartBelongToCurrentUser = getAllcartID[i];
             const guestCart = localStorage.getItem("cartID");
 
             const responseDeleteCart = await fetch(
-              "http://localhost:3000/routes/carts/" + guestCart,
+              "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+                guestCart,
               {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
@@ -312,7 +295,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
               localStorage.setItem("cartID", cartBelongToCurrentUser);
             }
           } else {
-            console.log("user does not have any cart ");
+            console.error("user does not have any cart ");
           }
         }
         window.location.reload();
@@ -321,7 +304,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const cartInStorage = localStorage.getItem("cartID");
       if (auth.currentUser !== null && cartInStorage !== null) {
         const responseUpdateCartRole = await fetch(
-          "http://localhost:3000/routes/carts/" + cartInStorage,
+          "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+            cartInStorage,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -332,14 +316,14 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           }
         );
         const data = await responseUpdateCartRole.json();
-        console.log(data);
+
         //window.location.reload();
-        console.log(responseUpdateCartRole.ok);
 
         if (!responseUpdateCartRole.ok) {
           throw Error("could not complete the action");
         }
       }
+
       window.location.reload();
     } catch (error) {
       console.error(error);

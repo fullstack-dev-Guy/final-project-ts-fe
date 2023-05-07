@@ -1,15 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
-
-import UserMenue from "../UserMenue/UserMenue";
 
 export default function Header() {
   const { user } = useAuth();
-  const navigate = useNavigate();
+
   var currentCart = localStorage.getItem("cartID");
 
+  let getTheCartQuantity = sessionStorage.getItem("itemquantity");
+
   return (
-    <div className=" mx-auto max-w-screen-2xl p-6">
+    <div className=" mx-auto max-w-screen-2xl px-1 pt-5">
       <div className="from-yellow-0 to-orange-0 relative h-full w-full bg-gradient-to-tr bg-cover bg-center">
         <img
           src="https://firebasestorage.googleapis.com/v0/b/final-project-coffee-trailer.appspot.com/o/images%2FIMG-20230125-WA0018-v3.jpg?alt=media&token=bb916f1d-be12-4ffa-85c3-3c4d22285055"
@@ -17,7 +17,7 @@ export default function Header() {
           alt="Header photo"
         />
 
-        <div className="p-5 ">
+        <div className="p-1">
           <nav className=" relative mx-auto">
             <div className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between  ">
               {currentCart === null ? (
@@ -39,7 +39,7 @@ export default function Header() {
                       </svg>
                     </div>
                     <div>
-                      <span className="ml-2 self-center whitespace-nowrap text-base font-semibold dark:text-white">
+                      <span className="ml-2 self-center whitespace-nowrap text-lg font-semibold dark:text-white">
                         סל קניות
                       </span>
                     </div>
@@ -52,7 +52,30 @@ export default function Header() {
                   role="button"
                 >
                   <button className="flex p-1  ">
-                    <div>
+                    <div className="">
+                      {user ? (
+                        <span className="mr-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                          {getTheCartQuantity}
+                        </span>
+                      ) : (
+                        <span className="mr-2 inline-flex items-center rounded-full bg-gray-100 p-1.5 text-sm font-semibold text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                          <svg
+                            aria-hidden="true"
+                            className="h-3.5 w-3.5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            ></path>
+                          </svg>
+                          <span className="sr-only">Icon description</span>
+                        </span>
+                      )}
+
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="30"
@@ -73,7 +96,24 @@ export default function Header() {
               )}
 
               {user ? (
-                <UserMenue />
+                <div>
+                  <Link to="/header/usermenue">
+                    <button
+                      type="button"
+                      className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    >
+                      ניהול משתמש
+                    </button>
+                  </Link>
+                  <Link to="/">
+                    <button
+                      type="button"
+                      className="mr-2 mb-2 rounded-lg bg-red-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                    >
+                      סגירה
+                    </button>
+                  </Link>
+                </div>
               ) : (
                 <div className="mt-1 flex items-center">
                   <Link to="/register">
@@ -97,13 +137,13 @@ export default function Header() {
             </div>
           </nav>
           <nav className=" relative mx-auto">
-            <div className=" mx-auto max-w-screen-xl px-1 py-4 md:px-4">
+            <div className=" mx-auto max-w-screen-xl  py-4 md:px-4">
               <div className="flex items-center">
-                <ul className="mt-0 mr-2 flex flex-row space-x-2 text-sm font-normal">
+                <ul className="mt-0 mr-2 flex flex-row space-x-2  font-normal">
                   <li>
                     <Link
                       to="/"
-                      className="rounded-lg  border border-gray-700 p-1 text-xs font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                       aria-current="page"
                     >
                       דף הבית
@@ -112,7 +152,7 @@ export default function Header() {
                   <li>
                     <Link
                       to="/about"
-                      className="rounded-lg  border border-gray-700 p-1 text-xs font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg  border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                     >
                       אודות
                     </Link>
@@ -120,7 +160,7 @@ export default function Header() {
                   <li>
                     <Link
                       to="/menu"
-                      className="rounded-lg  border border-gray-700 p-1 text-xs font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg  border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                     >
                       תפריט
                     </Link>
@@ -128,7 +168,7 @@ export default function Header() {
                   <li>
                     <Link
                       to="allproducts"
-                      className="rounded-lg  border border-gray-700 p-1 text-xs font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg  border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                     >
                       מוצרים
                     </Link>
@@ -144,7 +184,7 @@ export default function Header() {
                   <li>
                     <Link
                       to="/blogs"
-                      className="rounded-lg  border border-gray-700 p-1 text-xs font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg  border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                       aria-current="page"
                     >
                       בלוג
@@ -153,7 +193,7 @@ export default function Header() {
                   <li>
                     <Link
                       to="/coupons"
-                      className="rounded-lg  border border-gray-700 p-1 text-xs font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg  border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                     >
                       הטבות
                     </Link>
@@ -161,9 +201,17 @@ export default function Header() {
                   <li>
                     <Link
                       to="/openingtimes"
-                      className="rounded-lg  border border-gray-700 p-1 text-xs font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg  border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                     >
                       זמני פתיחה
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/contactform"
+                      className="rounded-lg  border border-gray-700 bg-lime-800 p-1 text-sm font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                    >
+                      צור קשר
                     </Link>
                   </li>
                 </ul>

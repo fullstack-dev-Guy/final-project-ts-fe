@@ -1,6 +1,6 @@
 export default function ShoppingCartDummy() {
   return (
-    <div>
+    <div className="mt-48 mb-40">
       <section className="bg-gray-50 py-3 dark:bg-gray-900 sm:py-5">
         <div className="mx-auto max-w-screen-2xl px-4 lg:px-12">
           <div className="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">

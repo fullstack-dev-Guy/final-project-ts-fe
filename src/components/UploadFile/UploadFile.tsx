@@ -10,8 +10,6 @@ export default function UploadFile() {
 
   const { id } = useParams();
 
-  console.log({ id });
-
   let currentId: string = id!;
 
   const [file, setFile] = useState<File | null>(null);
@@ -30,14 +28,13 @@ export default function UploadFile() {
         return url;
       })
     );
-    console.log("array2");
-    console.log(imageArry2);
+
     //////////////////////////////////////////////////////////
     try {
       if (file) {
         const storageRef = ref(storage, "images/" + file.name);
         const arrayBuffer = await file.arrayBuffer();
-        console.log("array buffer: ", arrayBuffer);
+
         await uploadBytes(storageRef, arrayBuffer);
         ////////////////////////////////////////////////////////
         const listRef = ref(storage, "images/");
@@ -51,15 +48,11 @@ export default function UploadFile() {
             return url;
           })
         );
-        console.log("array1");
-        console.log(imageArry1);
 
         let difference = imageArry1.filter((x) => !imageArry2.includes(x));
-        console.log("difference");
-        console.log(difference);
 
         let productIDwithImage = difference[0];
-        console.log(productIDwithImage);
+
         ////////////////////////////////////////////////////////
 
         ////////////////////////////////////////////////////////
@@ -69,7 +62,8 @@ export default function UploadFile() {
         ) => {
           try {
             const response = await fetch(
-              "http://localhost:3000/routes/products/" + currentId,
+              "https://final-project-ts-be-prisma-atlas.onrender.com/routes/products/" +
+                currentId,
               {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -79,9 +73,8 @@ export default function UploadFile() {
               }
             );
             const data = await response.json();
-            console.log(data);
+
             window.location.reload();
-            console.log(response.ok);
 
             if (!response.ok) {
               throw Error("could not complete the action");

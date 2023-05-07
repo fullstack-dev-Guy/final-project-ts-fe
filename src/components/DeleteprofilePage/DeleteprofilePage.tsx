@@ -9,8 +9,7 @@ import { userDb, getDocId } from "../../types/firestore";
 export default function DeleteprofilePage() {
   const { handleSignInUser } = useAuth();
   const userAuth = auth;
-  console.log(userAuth);
-  console.log("hello");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,18 +20,14 @@ export default function DeleteprofilePage() {
 
   const navigate = useNavigate();
 
-  //  const { id } = useParams();
-  //
-  //  let currentId: string = id!;
-  //  console.log(currentId);
-
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     //////////////////////////////////////////////////// first cart delete after that local strage delete
     const cartInStorage = localStorage.getItem("cartID");
 
     const responseDeleteCart = await fetch(
-      "http://localhost:3000/routes/carts/" + cartInStorage,
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+        cartInStorage,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -49,19 +44,21 @@ export default function DeleteprofilePage() {
 
     const checkEmail = (email: string) => {
       if (email === "") {
-        setEmailError("Email is a required field");
+        setEmailError("חובה להכניס אימייל");
         return false;
+      }
+      if (email !== auth.currentUser?.email) {
+        setEmailError("יש להכניס את האימייל שאיתו בוצע החיבור");
       } else {
         setEmailError("");
         return true;
       }
     };
     const isOkEmail = checkEmail(email);
-    console.log(isOkEmail + "email");
 
     const checkPassword = (password: string) => {
       if (password === "") {
-        setPasswordError("Password is required field");
+        setPasswordError("חובה להכניס סיסמה");
         return false;
       } else {
         setPasswordError("");
@@ -70,115 +67,101 @@ export default function DeleteprofilePage() {
     };
 
     const isOkPassword = checkPassword(password);
-    console.log(isOkPassword + "password");
 
     if (checkbox === false) {
       setCheckedError("Tick a V");
       setError("אמצעי ההתחברות לא תקינים");
-      console.log(checkbox + " " + "forgot password checkbox status");
+
       return false;
-      // return navigate("/forgotpassword");
     } else {
       setCheckedError("");
-      console.log(checkbox + " " + "forgot password checkbox status");
     }
 
     if (isOkEmail === true && checkbox === true && isOkPassword === true) {
-      // await handleSignOutUser();
-      await handleSignInUser(email, password);
+      let responseSignIn = await handleSignInUser(email, password);
+      if (responseSignIn.ok) {
+        const collectionRef = collection(db, "userDb");
+        const querySnapshot = await getDocs(collectionRef);
+        const docs = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-      const collectionRef = collection(db, "userDb");
-      const querySnapshot = await getDocs(collectionRef);
-      const docs = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+        const onlyDocId = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+        }));
 
-      const onlyDocId = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-      }));
+        const response = docs;
 
-      const response = docs;
-      console.log(response);
-      console.log("up");
+        const getAllEmails = JSON.parse(JSON.stringify(response)).map(
+          (doc: userDb) => doc.email
+        );
+        const getAllUserId = JSON.parse(JSON.stringify(response)).map(
+          (doc: userDb) => doc.userId
+        );
+        const getAllUserDocId = JSON.parse(JSON.stringify(response)).map(
+          (doc: userDb) => doc.UserDocId
+        );
+        const getAllPassword = JSON.parse(JSON.stringify(response)).map(
+          (doc: userDb) => doc.password
+        );
+        const getAllDocId = JSON.parse(JSON.stringify(onlyDocId)).map(
+          (doc: getDocId) => doc.id
+        );
 
-      const getAllEmails = JSON.parse(JSON.stringify(response)).map(
-        (doc: userDb) => doc.email
-      );
-      const getAllUserId = JSON.parse(JSON.stringify(response)).map(
-        (doc: userDb) => doc.userId
-      );
-      const getAllUserDocId = JSON.parse(JSON.stringify(response)).map(
-        (doc: userDb) => doc.UserDocId
-      );
-      const getAllPassword = JSON.parse(JSON.stringify(response)).map(
-        (doc: userDb) => doc.password
-      );
-      const getAllDocId = JSON.parse(JSON.stringify(onlyDocId)).map(
-        (doc: getDocId) => doc.id
-      );
-      console.log(getAllPassword);
-      console.log(onlyDocId);
-      console.log(getAllDocId);
-      //////////////////////////////////////////////////
-      const response2 = await fetch("http://localhost:3000/routes/users");
-      const data2 = await response2.json();
-      const getAllDocfromMongodb = JSON.parse(JSON.stringify(data2)).map(
-        (doc: userDb) => doc.id
-      );
-      console.log(response2.ok);
-      console.log(data2);
-      console.log(getAllDocfromMongodb);
+        //////////////////////////////////////////////////
+        const response2 = await fetch(
+          "https://final-project-ts-be-prisma-atlas.onrender.com/routes/users"
+        );
+        const data2 = await response2.json();
+        const getAllDocfromMongodb = JSON.parse(JSON.stringify(data2)).map(
+          (doc: userDb) => doc.id
+        );
 
-      if (!response2.ok) {
-        throw Error("could not fetch the data");
-      }
-      for (let j = 0; j < data2.length; j++) {
-        if (auth.currentUser?.uid === data2[j].firebaseUserID) {
-          const response = await fetch(
-            "http://localhost:3000/routes/users/" + getAllDocfromMongodb[j],
-            {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-            }
-          );
+        if (!response2.ok) {
+          throw Error("could not fetch the data");
         }
-      }
-      ////////////////////////////////////////////////
-
-      for (let i = 0; i < getAllDocId.length; i++) {
-        if (
-          getAllEmails[i] === email &&
-          getAllUserId[i] === auth.currentUser?.uid &&
-          getAllPassword[i] === password
-        ) {
-          let UserDocId: string = getAllUserDocId[i];
-          console.log(getAllPassword[i]);
-          console.log(UserDocId);
-
-          const docRefDelete = doc(db, "userDb", UserDocId);
-          await deleteDoc(docRefDelete);
-          await deleteUser(auth.currentUser as User);
-          console.log(UserDocId);
-          window.location.reload();
+        for (let j = 0; j < data2.length; j++) {
+          if (auth.currentUser?.uid === data2[j].firebaseUserID) {
+            const response = await fetch(
+              "https://final-project-ts-be-prisma-atlas.onrender.com/routes/users/" +
+                getAllDocfromMongodb[j],
+              {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+          }
         }
-      }
+        ////////////////////////////////////////////////
 
-      return navigate("/");
+        for (let i = 0; i < getAllDocId.length; i++) {
+          if (
+            getAllEmails[i] === email &&
+            getAllUserId[i] === auth.currentUser?.uid
+          ) {
+            let UserDocId: string = getAllUserDocId[i];
+
+            const docRefDelete = doc(db, "userDb", UserDocId);
+            await deleteDoc(docRefDelete);
+            await deleteUser(auth.currentUser as User);
+          }
+        }
+
+        return navigate("/deleteprofilesuccess");
+      } else {
+        return navigate("/deleteprofilefail");
+      }
     } else {
-      return console.log("not deleted"); //navigate("/tosignin");
+      return console.error("not deleted");
     }
   }
 
   return (
-    <div className="from-yellow-0 to-orange-0 relative mx-auto mt-20 h-full w-full max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-6 sm:mt-28 md:mt-28 lg:mt-28">
-      <div className="relative">
-        <img
-          src="./src\assets\images\IMG-20230126-WA0008-sar2.jpg"
-          className=" absolute h-full w-full object-cover mix-blend-overlay"
-        />
-        <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0 ">
-          <div className="to-amber-0 relative w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+    <div className="from-yellow-0 to-orange-0  mx-auto mt-48  max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-2 ">
+      <div className="">
+        <div className="mx-auto flex flex-col items-center justify-center px-4 py-4  lg:py-0 ">
+          <div className="to-amber-0  w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 השלמת פרטים לפני מחיקה
@@ -255,7 +238,7 @@ export default function DeleteprofilePage() {
                         htmlFor="remember"
                         className="text-black-600 dark:text-gray-300"
                       >
-                        Remember me
+                        V יש לסמן
                       </label>
                     </div>
                   </div>

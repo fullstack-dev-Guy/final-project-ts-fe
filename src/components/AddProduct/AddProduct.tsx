@@ -9,20 +9,22 @@ export default function AddProduct() {
 
   async function addProductAction() {
     try {
-      const response = await fetch("http://localhost:3000/routes/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productname: productname,
-          productprice: productprice,
-          productcategory: productcategory,
-          productDescription: productDescription,
-          imageToProduct: " ",
-          quantity: "1",
-        }),
-      });
+      const response = await fetch(
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/products",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            productname: productname,
+            productprice: productprice,
+            productcategory: productcategory,
+            productDescription: productDescription,
+            imageToProduct: " ",
+            quantity: "1",
+          }),
+        }
+      );
       window.location.reload();
-      console.log(response.ok);
 
       if (!response.ok) {
         throw Error("could not complete the action");
@@ -187,7 +189,7 @@ export default function AddProduct() {
               id="productname"
               className="peer mt-6 block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent py-2.5 px-0 text-center text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
               placeholder=" "
-              maxLength={16}
+              maxLength={22}
               required
             />
             <label

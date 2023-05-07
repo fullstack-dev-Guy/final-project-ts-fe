@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
-import { MyFetchResponse, Product } from "../../types/firestore";
+import { MyFetchResponse, Product, userDb } from "../../types/firestore";
+import { auth } from "../../lib/firebase";
 
 export default function AllProducts() {
   const products = useLoaderData() as MyFetchResponse<Product[]>;
@@ -44,8 +45,24 @@ export default function AllProducts() {
 
   if (products.status === "error") return <p>{products.message}</p>;
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const allUsers = useLoaderData() as MyFetchResponse<userDb[]>; //data2
+
+  var arryForGettingAllusers = JSON.parse(JSON.stringify(allUsers.data1)).map(
+    (x: userDb) => x
+  );
+
+  let userRecognize = arryForGettingAllusers!.filter(
+    (x: userDb) => x.email === auth.currentUser?.email
+  );
+
+  let currentRole1 = userRecognize.map((x: userDb) => x.role);
+  let currentRole = currentRole1[0];
+
+  ////////////////////////////////////////////////////////////////////////////////////
+
   return (
-    <div className="mx-auto mt-28 max-w-screen-2xl p-6">
+    <div className="mx-auto mt-44 max-w-screen-2xl p-6">
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-screen-2xl py-8 px-2 lg:py-16 lg:px-6">
           <div className="mx-auto mb-6 max-w-screen-sm text-center lg:mb-6">
@@ -61,7 +78,7 @@ export default function AllProducts() {
               לנרשמים באתר הנחה של 5% על כל מוצרי העגלה
             </p>
           </div>
-          {user ? (
+          {(user && currentRole === "admin") || currentRole === "editor" ? (
             <div className="  mb-2 flex justify-center">
               <button
                 onClick={() => navigate("/addproduct")}
@@ -133,7 +150,7 @@ export default function AllProducts() {
                   </label>
                 </div>
               </li>
-              <li className=" w-full text-center dark:border-gray-600">
+              <li className=" w-full border-b border-gray-200 text-center dark:border-gray-600 sm:border-b-0 sm:border-r">
                 <div className="flex items-center pl-3">
                   <input
                     onChange={(event) => setProductcategory(event.target.value)}
@@ -148,7 +165,7 @@ export default function AllProducts() {
                     htmlFor="horizontal-list-radio-passport"
                     className="ml-2 w-full py-3 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    טוסטים
+                    טוסטים/כריכים
                   </label>
                 </div>
               </li>
@@ -334,7 +351,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -353,7 +371,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -464,7 +483,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -483,7 +503,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -594,7 +615,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -613,7 +635,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -724,7 +747,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -743,7 +767,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -854,7 +879,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -873,7 +899,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -984,7 +1011,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -1003,7 +1031,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -1114,7 +1143,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -1133,7 +1163,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -1244,7 +1275,8 @@ export default function AllProducts() {
                         הוסף לסל קניות
                       </button>
                     </div>
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="flex justify-center">
                         <button
                           onClick={() => navigate("editproduct/" + product.id)}
@@ -1263,7 +1295,8 @@ export default function AllProducts() {
                       </div>
                     ) : null}
 
-                    {user ? (
+                    {(user && currentRole === "admin") ||
+                    currentRole === "editor" ? (
                       <div className="mt-2 flex justify-center">
                         <button
                           onClick={() => navigate("uploadfile/" + product.id)}
@@ -1291,17 +1324,29 @@ export default function AllProducts() {
 
 export async function productsLoader() {
   try {
-    const response = await fetch("http://localhost:3000/routes/products");
+    const response = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/products"
+    );
     const data = await response.json();
-    console.log(response.ok);
 
     if (!response.ok) {
       throw Error("could not fetch the data");
     }
-    return { data, status: "success" };
+
+    const response1 = await fetch(
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/users"
+    );
+    const usersFromMongoDb = await response1.json();
+
+    const data1 = usersFromMongoDb;
+    if (!response1.ok) {
+      throw Error("could not fetch the data");
+    }
+
+    return { data, data1, status: "success" };
   } catch (error) {
     console.error(error);
-    console.log("error-catch");
+
     return { status: "error", message: (error as Error).message, data: null };
   }
 }

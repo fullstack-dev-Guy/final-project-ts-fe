@@ -6,41 +6,17 @@ import { auth } from "../../lib/firebase";
 export default function OrderNumberPage() {
   const navigate = useNavigate();
   const orderNumber = localStorage.getItem("orderN");
-  console.log(orderNumber);
 
-  const { user } = useAuth(); // זה יוצר בעיה ברינדור  של הסל
+  //const { user } = useAuth(); // זה יוצר בעיה ברינדור  של הסל
   const newDate = new Date();
   const currentTime = newDate.toLocaleString("he-IL");
-  console.log("currentTime");
-  console.log(currentTime);
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   var currentCart = localStorage.getItem("cartID");
   //const { user } = useAuth(); זה יוצר בעיה ברינדור  של הסל
   let authIndication = auth.currentUser;
 
   const carts = useLoaderData() as MyFetchResponse<Cart[]>;
-  console.log("authIndication");
-  console.log(authIndication);
-  console.log("carts");
-  console.log(carts);
-  console.log("currentCart");
-  console.log(currentCart);
-
-  const arryForCartId = JSON.parse(JSON.stringify(carts.data)).map(
-    (x: Cart) => x.id
-  );
-  console.log(arryForCartId);
-
-  const arryForCartProducts = JSON.parse(JSON.stringify(carts.data)).map(
-    (x: Cart) => x.products
-  );
-  console.log(arryForCartProducts);
-
-  const arryForCartUserID = JSON.parse(JSON.stringify(carts.data)).map(
-    (x: Cart) => x.userID
-  );
-
-  console.log(arryForCartUserID);
 
   const currentCartDetails = carts.data?.filter((x) => x.id === currentCart); //i got the cart object with all the details
 
@@ -50,29 +26,20 @@ export default function OrderNumberPage() {
   } else {
     priceDiscount = "no";
   }
-  console.log("currentCartDetails");
-  console.log(currentCartDetails);
+
   var getAllProductsIdFromCurrentCart = currentCartDetails?.map(
     (x) => x.products
   );
-  console.log("getAllProductsIdFromCurrentCart");
-  console.log(getAllProductsIdFromCurrentCart);
-  console.log(getAllProductsIdFromCurrentCart![0]);
 
   let productsArry: string[] = getAllProductsIdFromCurrentCart![0].map(
     (product) => product
   );
-  console.log("productsArry");
-  console.log(productsArry);
 
   const products = useLoaderData() as MyFetchResponse<Product>;
-  console.log("products");
-  console.log(products);
+
   var arryForGettingAllProducts = JSON.parse(
     JSON.stringify(products.data1)
   ).map((x: Product) => x);
-  console.log("arryForGettingAllProducts");
-  console.log(arryForGettingAllProducts);
 
   let getProductDetails: Product[] = [];
 
@@ -83,17 +50,14 @@ export default function OrderNumberPage() {
       }
     }
   }
-  console.log("getProductDetails");
-  console.log(getProductDetails); // זה מערך של מוצרים בסל עם כל המידע עליהם
+
+  //console.log(getProductDetails); // זה מערך של מוצרים בסל עם כל המידע עליהם
 
   ///////////////////////////////////////////////// חישוב הסכום של המוצרים לפי מחיר ולפי משתמש רשום שמקבל הנחה
 
   let getAllCartProductPrice = JSON.parse(
     JSON.stringify(getProductDetails)
   ).map((x: Product) => x.productprice);
-
-  console.log("getAllCartProductPrice");
-  console.log(getAllCartProductPrice);
 
   let productsSum: number = 0;
   if (currentCartDetails![0].userID !== " ") {
@@ -102,15 +66,11 @@ export default function OrderNumberPage() {
       productsSum = productsSum + temp;
     }
     productsSum = productsSum - productsSum * 0.05;
-    console.log("productsSum");
-    console.log(productsSum);
   } else {
     for (let i = 0; i < getAllCartProductPrice.length; i++) {
       let temp: number = Number(getAllCartProductPrice[i]);
       productsSum = productsSum + temp;
     }
-    console.log("productsSum");
-    console.log(productsSum);
   }
   let newproductsSum: string = productsSum.toString();
   sessionStorage.setItem("productsSum", newproductsSum);
@@ -120,14 +80,11 @@ export default function OrderNumberPage() {
     getProductDetails.includes(x)
   );
 
-  console.log("getProductDetails1");
-  console.log(getProductDetails1); // זה מערך של מוצרים עם כל המידע עליהם
+  //console.log(getProductDetails1); // זה מערך של מוצרים עם כל המידע עליהם
 
   var allProductsIdArry: string[] = JSON.parse(
     JSON.stringify(arryForGettingAllProducts)
   ).map((x: Product) => x.id);
-  console.log("allProductsIdArry");
-  console.log(allProductsIdArry);
 
   let quantityOfProductsArry: number[] = []; // כמה פעמים מופיע מוצר במערך ? לכאן נכניס את מספר הפעמים שמופיע
   let cartProductCorolationtoQuantity: string[] = [];
@@ -149,18 +106,16 @@ export default function OrderNumberPage() {
   cartProductCorolationtoQuantity = cartProductCorolationtoQuantity.filter(
     (e) => String(e).trim()
   );
-  console.log("quantityOfProductsAryy");
-  console.log(quantityOfProductsArry); //סכום המערך יתן את כמות המוצרים הכללית בסל
-  console.log("cartProductCorolationtoQuantity");
-  console.log(cartProductCorolationtoQuantity);
+
+  //console.log(quantityOfProductsArry); //סכום המערך יתן את כמות המוצרים הכללית בסל
+
   ///////////////////////////////////////////////////////////////// חישוב כמות הפריטים בסל
   let howManyProducts: number = 0;
   for (let i = 0; i < quantityOfProductsArry.length; i++) {
     let temp: number = quantityOfProductsArry[i];
     howManyProducts = howManyProducts + temp;
   }
-  console.log("howManyProducts");
-  console.log(howManyProducts);
+
   let newhowManyProducts: string = howManyProducts.toString();
   sessionStorage.setItem("itemquantity", newhowManyProducts);
   //////////////////////////////////////////////////////////////////
@@ -170,17 +125,16 @@ export default function OrderNumberPage() {
       getProductDetails1[i].quantity = quantityOfProductsArry[i];
     }
   }
-  console.log("getProductDetails1");
-  console.log(getProductDetails1);
 
   function addClickEventListener() {
     document.addEventListener("click", deletetheCurrentCartAndTheLocalstorage);
   }
   // asuming the user not press the button for return to the home page
   async function deletetheCurrentCartAndTheLocalstorage() {
-    console.log("You clicked somewhere on the screen!");
+    // console.log("You clicked somewhere on the screen!");
     var responseDeleteCart = await fetch(
-      "http://localhost:3000/routes/carts/" + currentCart,
+      "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
+        currentCart,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -189,20 +143,23 @@ export default function OrderNumberPage() {
 
     localStorage.removeItem("cartID");
     localStorage.removeItem("orderN");
+    sessionStorage.removeItem("itemquantity");
+    sessionStorage.removeItem("productsSum");
     if (!responseDeleteCart.ok) {
       throw Error("could not complete the action of fetch to order");
     }
-
-    navigate("/");
     removeEventListener("click", deletetheCurrentCartAndTheLocalstorage);
-    window.location.reload();
+    navigate("/");
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   }
 
   addClickEventListener();
 
   function reload() {
     setTimeout(() => {
-      console.log("Delayed for 1 second.");
       window.location.reload();
     }, 1000);
   }

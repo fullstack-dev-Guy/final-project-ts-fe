@@ -1,13 +1,25 @@
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { db } from "../../lib/firebase";
-import { Blog } from "../../types/firestore";
+import { Link, useLoaderData, useParams } from "react-router-dom";
+import { auth, db } from "../../lib/firebase";
+import { Blog, MyFetchResponse, userDb } from "../../types/firestore";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function BlogPage() {
+  //////////////////////////////////////////////////////////////////////
+  const users1 = useLoaderData() as MyFetchResponse<userDb[]>;
+
+  let user2 = users1.data?.map((x: userDb) => x);
+
+  let userRecognize = user2!.filter((x) => x.email === auth.currentUser?.email);
+
+  let currentRole1 = userRecognize.map((x: userDb) => x.role);
+  let currentRole = currentRole1[0];
+
+  //////////////////////////////////////////////////////////////////////////
+  const { user } = useAuth();
   const [myBlogPage, setMyBlogPage] = useState<Blog | null>(null);
   const { id } = useParams();
-  console.log({ id });
 
   let currentId: string = id!;
   useEffect(() => {
@@ -24,7 +36,7 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <div className="mx-auto mt-20 max-w-screen-xl p-6">
+    <div className="mx-auto mt-32 mt-20 max-w-screen-xl p-6">
       <article className=" mb-4 rounded-lg border border-gray-200 bg-orange-100 shadow-md dark:border-gray-700 dark:bg-gray-800">
         <p>{myBlogPage?.id}</p>
 
@@ -45,6 +57,27 @@ export default function BlogPage() {
               חזרה לדף הבלוגים
             </button>
           </Link>
+
+          {user ? (
+            <Link to="/myallblogs">
+              <button
+                role="button"
+                className="ml-2 rounded-lg border border-gray-700 bg-yellow-200 p-2 text-base  font-semibold  text-violet-700 hover:bg-yellow-300 focus:outline-none focus:ring focus:ring-violet-300 active:bg-yellow-500 dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+              >
+                הבלוגים שלי
+              </button>
+            </Link>
+          ) : null}
+          {user && user.email && currentRole.toString() === "admin" ? (
+            <Link to="/blogmangment">
+              <button
+                role="button"
+                className="ml-2 rounded-lg border border-gray-700 bg-yellow-200 p-2 text-base  font-semibold  text-violet-700 hover:bg-yellow-300 focus:outline-none focus:ring focus:ring-violet-300 active:bg-yellow-500 dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+              >
+                חזרה לניהול כל הבלוגים
+              </button>
+            </Link>
+          ) : null}
         </div>
         <div className=" ">
           <h2 className=" mb-2 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white ">
@@ -57,9 +90,7 @@ export default function BlogPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <span className="font-medium dark:text-white">
-              {myBlogPage?.lastname}
-              <span>_</span>
-              {myBlogPage?.firstname}
+              {myBlogPage?.date}
             </span>
           </div>
         </div>

@@ -26,17 +26,14 @@ export default function ForgotPassword() {
     };
 
     const isOkEmail = checkEmail(email);
-    console.log(isOkEmail + "email");
 
     if (checkbox === false) {
       setCheckedError("Tick a V");
       setError("אמצעי ההתחברות לא תקינים");
-      console.log(checkbox + " " + "forgot password checkbox status");
+
       return false;
-      // return navigate("/forgotpassword");
     } else {
       setCheckedError("");
-      console.log(checkbox + " " + "forgot password checkbox status");
     }
 
     if (isOkEmail === true && checkbox === true) {
@@ -48,14 +45,10 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="from-yellow-0 to-orange-0 relative mx-auto mt-20 h-full w-full max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-6 sm:mt-20 md:mt-20 lg:mt-20">
-      <div className="relative">
-        <img
-          src="./src\assets\images\IMG-20230126-WA0008-sar2.jpg"
-          className=" absolute h-full w-full object-cover mix-blend-overlay"
-        />
-        <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0 ">
-          <div className="to-amber-0 relative w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+    <div className="from-yellow-0 to-orange-0  mx-auto mt-48  max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-2 ">
+      <div className="">
+        <div className="mx-auto flex flex-col items-center justify-center px-4 py-4  lg:py-0 ">
+          <div className="to-amber-0  w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 שחזור סיסמה
@@ -75,9 +68,9 @@ export default function ForgotPassword() {
                 <div>
                   <label
                     htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    className="mb-2 block text-center text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Your email
+                    יש להכניס אימייל
                   </label>
                   <input
                     onChange={(event) => setEmail(event.target.value)}
@@ -103,11 +96,10 @@ export default function ForgotPassword() {
                         type="checkbox"
                         className="focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800"
                         checked={checkbox}
-                        //required
                       />
                     </div>
                     {checkedError ? (
-                      <p className="text-xs font-medium text-red-700">
+                      <p className="ml-2 text-xs font-medium text-red-700">
                         {checkedError}
                       </p>
                     ) : null}

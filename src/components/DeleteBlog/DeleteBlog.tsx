@@ -6,7 +6,6 @@ import { db } from "../../lib/firebase";
 export default function DeleteBlog() {
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log({ id });
 
   let currentId: string = id!;
 
@@ -66,7 +65,7 @@ export default function DeleteBlog() {
           </Link>
 
           <button
-            onClick={() => navigate("/blogs")}
+            onClick={() => navigate("/myallblogs")}
             type="button"
             className="rounded-lg border border-red-800 bg-transparent px-3 py-1.5 text-center text-xs font-medium text-red-800 hover:bg-red-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-600 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-800"
             data-dismiss-target="#alert-additional-content-2"

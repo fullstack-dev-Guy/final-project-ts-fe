@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Coupons() {
   return (
-    <div>
+    <div className="mt-44">
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-screen-xl py-8 px-4 lg:py-16 lg:px-6">
           <div className="mx-auto mb-6 max-w-screen-sm text-center lg:mb-6">

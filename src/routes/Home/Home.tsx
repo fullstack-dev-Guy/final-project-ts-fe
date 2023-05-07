@@ -6,7 +6,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <MyCarousel />
+      <div className="mx-auto h-1/3 w-1/3">
+        <MyCarousel />
+      </div>
     </>
   );
 }

@@ -1,1 +1,1 @@
-export { default as DeleteBlog } from "./DeleteBlog"
+export { default as DeleteBlog } from "./DeleteBlog";

@@ -4,7 +4,7 @@ export default function EmailInUse() {
   const navigate = useNavigate();
 
   return (
-    <div className="from-yellow-0 to-orange-0 relative mx-auto mt-20 h-full w-full max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-6 sm:mt-28 md:mt-28 lg:mt-28">
+    <div className="from-yellow-0 to-orange-0 relative mx-auto  h-full w-full max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-6 ">
       <div className="flex justify-center ">
         <div className=" top-58 fixed z-10 mx-auto  p-8 ">
           <div
@@ -53,13 +53,9 @@ export default function EmailInUse() {
         </div>
       </div>
 
-      <div className="relative">
-        <img
-          src="./src\assets\images\IMG-20230126-WA0008-sar2.jpg"
-          className=" absolute h-full w-full object-cover mix-blend-overlay"
-        />
-        <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0 ">
-          <div className="to-amber-0 relative w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+      <div className="from-yellow-0 to-orange-0  mx-auto mt-48  max-w-screen-2xl bg-gradient-to-tr bg-cover bg-center p-2 ">
+        <div className="mx-auto flex flex-col items-center justify-center px-4 py-4  lg:py-0 ">
+          <div className="to-amber-0  w-full rounded-lg border-4 border-amber-800 bg-gradient-to-tr from-amber-500 shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-center text-2xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 יצירת משתמש חדש

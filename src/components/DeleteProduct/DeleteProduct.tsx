@@ -3,14 +3,13 @@ import { Link, redirect, useParams } from "react-router-dom";
 export default function DeleteProduct() {
   const { id } = useParams();
 
-  console.log({ id });
-
   let currentId: string = id!;
 
   async function deleteProductAction(currentId: string) {
     try {
       const response = await fetch(
-        "http://localhost:3000/routes/products/" + currentId,
+        "https://final-project-ts-be-prisma-atlas.onrender.com/routes/products/" +
+          currentId,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -19,8 +18,6 @@ export default function DeleteProduct() {
       const data = await response.json();
 
       window.location.reload();
-      console.log(response.ok + "DELETPRODUCT");
-      console.log(data);
 
       if (!response.ok) {
         throw Error("could not complete the action");
