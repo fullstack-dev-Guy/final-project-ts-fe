@@ -2,7 +2,7 @@ import { Carousel } from "flowbite-react";
 
 export default function Hero() {
   return (
-    <div className="mx-auto mt-32 max-w-screen-2xl px-6 pt-6 pb-0  ">
+    <div className="mx-auto mt-40 max-w-screen-2xl px-6 pt-6 pb-0  ">
       <div className="from-yellow-0 to-orange-0 relative h-full h-96 w-full bg-gradient-to-tr bg-cover bg-center">
         <div className="relative mx-auto h-full w-full max-w-screen-xl bg-cover bg-center py-8 px-4 text-center lg:py-16 lg:px-12">
           <h1 className="to-amber-0 relative mb-4 rounded-lg bg-gradient-to-r from-amber-100 text-4xl font-medium leading-none tracking-tight  text-yellow-800 dark:text-white md:text-5xl lg:text-6xl">

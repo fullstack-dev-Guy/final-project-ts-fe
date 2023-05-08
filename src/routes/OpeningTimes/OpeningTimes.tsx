@@ -53,7 +53,7 @@ export default function OpeningTimes() {
 
           <div>
             <img
-              src="./src\assets\images\img-20221029-wa0001.jpg"
+              src="https://firebasestorage.googleapis.com/v0/b/final-project-coffee-trailer.appspot.com/o/images%2Fimg-20221029-wa0001.jpg?alt=media&token=b14cb27e-c2a2-4ac4-a2d1-8d4fab6e92ba"
               className=" h-full w-full object-cover  "
             />
           </div>

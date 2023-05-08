@@ -69,6 +69,7 @@ import { ContactMassage } from "./components/ContactMassage";
 import { DeleteProfileSuccess } from "./components/DeleteProfileSuccess";
 import { DeleteProfileFail } from "./components/DeleteProfileFail";
 import { NotActiveMassage } from "./components/NotActiveMassage";
+import { NotFoundPage } from "./components/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
   {
     path: "/signinindicationpage",
     element: <SignInIndicationPage />,
+  },
+  {
+    path: "notfoundpage",
+    element: <NotFoundPage />,
   },
   {
     path: "deleteprofilesuccess",
