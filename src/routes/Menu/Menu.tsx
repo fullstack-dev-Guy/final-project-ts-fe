@@ -211,6 +211,16 @@ export default function Menu() {
           </div>
         </div>
       </section>
+      <div className="  mb-2 flex justify-center">
+        <Link to="/">
+          <button
+            role="button"
+            className=" rounded-lg border border-gray-700 bg-yellow-200 p-2 text-base  font-semibold  text-violet-700 hover:bg-yellow-300 focus:outline-none focus:ring focus:ring-violet-300 active:bg-yellow-500 dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+          >
+            חזרה לדף הבית
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

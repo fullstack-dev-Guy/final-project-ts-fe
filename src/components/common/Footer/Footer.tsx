@@ -1,4 +1,4 @@
-import { redirect, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { auth } from "../../../lib/firebase";
 import { signOut } from "firebase/auth";
 
@@ -84,9 +84,9 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href="/about" className="hover:underline">
-                    אודות
-                  </a>
+                  <Link to="/about">
+                    <span className="hover:underline">אודות</span>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -98,7 +98,7 @@ export default function Footer() {
                 <li className="mb-4">
                   <a
                     target="_blank"
-                    href="https://www.facebook.com/"
+                    href="https://www.facebook.com/profile.php?id=100089741672456&mibextid=ZbWKwL"
                     className="hover:underline "
                   >
                     Facebook
@@ -107,7 +107,7 @@ export default function Footer() {
                 <li>
                   <a
                     target="_blank"
-                    href="https://www.instagram.com/"
+                    href="https://instagram.com/sarcafe_maor?igshid=ZGUzMzM3NWJiOQ=="
                     className="hover:underline"
                   >
                     Instagram
