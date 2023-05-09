@@ -74,11 +74,10 @@ export default function UploadFile() {
             );
             const data = await response.json();
 
-            window.location.reload();
-
             if (!response.ok) {
               throw Error("could not complete the action");
             }
+            navigate("/allproducts");
           } catch (error) {
             console.error(error);
             return {
@@ -87,14 +86,17 @@ export default function UploadFile() {
               message: (error as Error).message,
             };
           }
+          return navigate("/allproducts");
         };
         handleEditProduct(currentId, productIDwithImage);
         ////////////////////////////////////////////////////////
         navigate("/allproducts");
       }
+      navigate("/allproducts");
     } catch (error) {
       console.error(error);
     }
+    return navigate("/allproducts");
   }
 
   return (

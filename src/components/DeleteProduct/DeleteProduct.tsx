@@ -1,6 +1,7 @@
-import { Link, redirect, useParams } from "react-router-dom";
+import { Link, redirect, useNavigate, useParams } from "react-router-dom";
 
 export default function DeleteProduct() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   let currentId: string = id!;
@@ -17,12 +18,10 @@ export default function DeleteProduct() {
       );
       const data = await response.json();
 
-      window.location.reload();
-
       if (!response.ok) {
         throw Error("could not complete the action");
       }
-      return redirect("/allproducts");
+      return navigate("/allproducts");
     } catch (error) {
       console.error(error);
       return { status: "error", data: null, message: (error as Error).message };

@@ -27,6 +27,16 @@ export default function NotActiveMassage() {
                 חזרה לדף הבית
               </button>
             </Link>
+            <Link to="/orderpage" role="button">
+              <button
+                className="my-4 ml-4 inline-flex rounded-lg bg-indigo-600 px-5
+                  py-2.5 text-center text-sm font-medium text-white
+                  hover:bg-indigo-800 focus:outline-none focus:ring-4
+                  focus:ring-indigo-300 dark:focus:ring-indigo-900"
+              >
+                חזרה להזמנה
+              </button>
+            </Link>
           </div>
         </div>
       </section>

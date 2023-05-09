@@ -119,7 +119,7 @@ export default function ShoppingCart() {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////////הכנה לפני שמירה באיחסון סשן
+  ///////////////////////////////////////////////////////////////////////////////
   function reload() {
     setTimeout(() => {
       window.location.reload();
@@ -144,12 +144,6 @@ export default function ShoppingCart() {
       return;
     }
 
-    //  let arr = [1, 2, 3, 4, 5, 3]; // מזהה ומוציא את כל האלמנטים שהם זהים כלומר מוציא כפילויות כולל הערך עצמו
-    //  arr = arr.filter((item) => item !== value);
-    //  console.log(arr);
-    //    const words = ['spray', 'limit', 'elite', 'exuberant', ' ', ''];
-    //    const result = words.filter(word => word.trim().length > 0); //  מנקה מקומות ריקים במערך
-
     try {
       const responseUpdateCartproducts = await fetch(
         "https://final-project-ts-be-prisma-atlas.onrender.com/routes/carts/" +
@@ -159,22 +153,15 @@ export default function ShoppingCart() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             products: resultProductArryAfterTrim,
-            //    role: "user",
-            //    createdAt: "2023-04-13T17:50:20.011Z",
-            //    updatedAt: "2023-04-14T12:38:01.164Z",
-            //    userID: "ry8yCSrJtFb1hIxxPCKgERcei1u1",
-            //    ses: "",
           }),
         }
       );
       const data = await responseUpdateCartproducts.json();
 
-      window.location.reload();
-
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
       }
-      return redirect("/shoppingcart");
+      return navigate("/shoppingcart");
     } catch (error) {
       console.error(error);
       return { status: "error", data: null, message: (error as Error).message };
@@ -197,8 +184,6 @@ export default function ShoppingCart() {
         }
       );
       const data = await responseUpdateCartproducts.json();
-
-      window.location.reload();
 
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
@@ -226,12 +211,10 @@ export default function ShoppingCart() {
       );
       const data = await responseUpdateCartproducts.json();
 
-      window.location.reload();
-
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
       }
-      return redirect("/shoppingcart");
+      return navigate("/shoppingcart");
     } catch (error) {
       console.error(error);
       return { status: "error", data: null, message: (error as Error).message };
@@ -259,12 +242,10 @@ export default function ShoppingCart() {
       );
       const data = await responseUpdateCartproducts.json();
 
-      window.location.reload();
-
       if (!responseUpdateCartproducts.ok) {
         throw Error("could not complete the action");
       }
-      return redirect("/shoppingcart");
+      return navigate("/shoppingcart");
     } catch (error) {
       console.error(error);
       return { status: "error", data: null, message: (error as Error).message };

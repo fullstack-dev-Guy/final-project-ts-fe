@@ -1,8 +1,9 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Cart } from "../../types/firestore";
 import { auth } from "../../lib/firebase";
 
 export default function AddToShoppingCart() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   let currentId: string = id!; // זה איי די של מוצר
@@ -96,7 +97,7 @@ export default function AddToShoppingCart() {
             message: (error as Error).message,
           };
         }
-        window.location.reload();
+        navigate("/allproducts");
         ///////////////////////////////////////////////////////b
       } else {
         const getAllCarts1 = await fetch(
@@ -182,7 +183,7 @@ export default function AddToShoppingCart() {
             message: (error as Error).message,
           };
         }
-        window.location.reload();
+        navigate("/allproducts");
       }
     } else {
       console.error("cart already exist");
@@ -206,7 +207,7 @@ export default function AddToShoppingCart() {
       if (!response2.ok) {
         throw Error("could not complete the action");
       }
-      window.location.reload();
+      navigate("/allproducts");
     }
   }
 

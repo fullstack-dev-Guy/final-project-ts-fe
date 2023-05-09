@@ -207,8 +207,6 @@ export default function Register() {
           );
           const data = await responseUpdateCartRole.json();
 
-          //window.location.reload();
-
           if (!responseUpdateCartRole.ok) {
             throw Error("could not complete the action");
           }

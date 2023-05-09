@@ -14,11 +14,6 @@ import {
 import { emailjsObject } from "../../lib/mailjs";
 
 export default function OrderPage() {
-  useEffect(() => {
-    window.process = {
-      ...window.process,
-    };
-  }, []);
   const form = useRef();
   const navigate = useNavigate();
   const { user } = useAuth(); // זה יוצר בעיה ברינדור  של הסל

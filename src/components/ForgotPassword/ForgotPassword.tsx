@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
+import { auth } from "../../lib/firebase";
 
 export default function ForgotPassword() {
   const { handleUserForgotPassword } = useAuth();
@@ -18,6 +19,11 @@ export default function ForgotPassword() {
     const checkEmail = (email: string) => {
       if (email === "") {
         setEmailError("Email is a required field");
+        return false;
+      }
+
+      if (auth.currentUser?.email !== email) {
+        setEmailError("Please put the Email you signed with");
         return false;
       } else {
         setEmailError("");

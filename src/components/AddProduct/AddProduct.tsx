@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Form, Link, redirect } from "react-router-dom";
+import { Form, Link, redirect, useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
+  const navigate = useNavigate();
   const [productcategory, setProductcategory] = useState(" ");
   const [productname, setProductName] = useState(" ");
   const [productprice, setProductPrice] = useState(" ");
@@ -24,12 +25,11 @@ export default function AddProduct() {
           }),
         }
       );
-      window.location.reload();
 
       if (!response.ok) {
         throw Error("could not complete the action");
       }
-      return redirect("/");
+      return navigate("/allproducts");
     } catch (error) {
       console.error(error);
       return { status: "error", data: null, message: (error as Error).message };

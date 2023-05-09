@@ -52,7 +52,7 @@ export default function DeleteCartArchivesAndOrder() {
       throw Error("could not fetch the data");
     }
 
-    window.location.reload();
+    return navigate("/ordermanagement");
   };
 
   return (

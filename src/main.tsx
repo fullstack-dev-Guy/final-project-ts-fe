@@ -70,7 +70,7 @@ import { DeleteProfileSuccess } from "./components/DeleteProfileSuccess";
 import { DeleteProfileFail } from "./components/DeleteProfileFail";
 import { NotActiveMassage } from "./components/NotActiveMassage";
 import { NotFoundPage } from "./components/NotFoundPage";
-
+//production
 const router = createBrowserRouter([
   {
     path: "orderpage/ordernumberpage",
@@ -80,6 +80,10 @@ const router = createBrowserRouter([
   {
     path: "/signinindicationpage",
     element: <SignInIndicationPage />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
   {
     path: "notfoundpage",

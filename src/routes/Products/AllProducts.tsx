@@ -9,7 +9,7 @@ export default function AllProducts() {
   const products = useLoaderData() as MyFetchResponse<Product[]>;
   const { user } = useAuth();
 
-  const [productcategory, setProductcategory] = useState(" ");
+  const [productcategory, setProductcategory] = useState("AllCategories");
 
   const navigate = useNavigate();
 

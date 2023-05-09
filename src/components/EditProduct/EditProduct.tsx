@@ -4,11 +4,13 @@ import {
   Link,
   redirect,
   useLoaderData,
+  useNavigate,
   useParams,
 } from "react-router-dom";
 import { MyFetchResponse, Product } from "../../types/firestore";
 
 export default function EditProduct() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   let currentId: string = id!;
@@ -56,16 +58,15 @@ export default function EditProduct() {
       );
       const data = await response.json();
 
-      window.location.reload();
-
       if (!response.ok) {
         throw Error("could not complete the action");
       }
-      return redirect("/allproducts");
+      navigate("/allproducts");
     } catch (error) {
       console.error(error);
       return { status: "error", data: null, message: (error as Error).message };
     }
+    return navigate("/allproducts");
   };
 
   return (

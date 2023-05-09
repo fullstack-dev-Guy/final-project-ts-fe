@@ -1,9 +1,10 @@
 import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../../lib/firebase";
 
 export default function AddBlog() {
+  const navigate = useNavigate();
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [title, setTitle] = useState("");
@@ -25,7 +26,7 @@ export default function AddBlog() {
         useremail: userEmail,
         date: currentTime,
       });
-      window.location.reload();
+      return navigate("/blogs");
     } catch (error) {
       console.error(error);
     }
@@ -40,7 +41,7 @@ export default function AddBlog() {
           href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre&display=swap"
         />
       </head>
-      <div className="mx-auto mt-32 max-w-screen-2xl p-6 sm:mt-32 md:mt-32 lg:mt-32 xl:mt-32 2xl:mt-32">
+      <div className="mx-auto mt-44 max-w-screen-2xl p-6 sm:mt-44 md:mt-44 lg:mt-44 xl:mt-44 2xl:mt-44">
         <label
           htmlFor="message"
           className="mb-2 block text-center text-sm font-medium text-gray-900 dark:text-white"

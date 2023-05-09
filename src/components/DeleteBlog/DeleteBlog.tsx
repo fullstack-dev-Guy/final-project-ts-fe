@@ -13,10 +13,11 @@ export default function DeleteBlog() {
     try {
       const docRef = doc(db, "blog", currentId);
       await deleteDoc(docRef);
-      window.location.reload();
+      navigate("/myallblogs");
     } catch (error) {
       console.error(error);
     }
+    return navigate("/myallblogs");
   };
 
   return (

@@ -3,9 +3,9 @@ import { CartArchives, MyFetchResponse, Order } from "../../types/firestore";
 import { useAuth } from "../../context/AuthProvider";
 
 export default function UpdateStatusWarning() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { id } = useParams();
-  const navigate = useNavigate();
 
   let currentId: string = id!; // מספר סל ארכיון
 
@@ -38,10 +38,11 @@ export default function UpdateStatusWarning() {
           }),
         }
       );
-      window.location.reload();
+      navigate("/ordermanagement");
     } catch (error) {
       console.error(error);
     }
+    return navigate("/ordermanagement");
   };
   return (
     <div className=" fixed top-32 z-10 m-4 p-6 ">

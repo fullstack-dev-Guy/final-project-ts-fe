@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthProvider";
 
 export default function Header() {
   const { user } = useAuth();
-
+  useNavigate();
   var currentCart = localStorage.getItem("cartID");
 
   let getTheCartQuantity = sessionStorage.getItem("itemquantity");
@@ -26,7 +26,7 @@ export default function Header() {
                   className=" flex items-center"
                   role="button"
                 >
-                  <button className="flex p-1  ">
+                  <button className="flex rounded-lg border bg-gray-400 p-1  ">
                     <div>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ export default function Header() {
                   className=" flex items-center"
                   role="button"
                 >
-                  <button className="flex p-1  ">
+                  <button className="flex rounded-lg border bg-gray-400 p-1  ">
                     <div className="">
                       {user ? (
                         <span className="mr-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
@@ -119,7 +119,7 @@ export default function Header() {
                   <Link to="/register">
                     <button
                       role="button"
-                      className="mr-2 rounded-lg  border border-gray-700 p-1 text-base font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 "
+                      className="mr-2 rounded-lg border  border-gray-700 bg-gray-500 p-1 text-base font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 "
                     >
                       הרשמה
                     </button>
@@ -127,7 +127,7 @@ export default function Header() {
                   <Link to="/tosignin">
                     <button
                       role="button"
-                      className="rounded-lg  border border-gray-700 p-1 text-base font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                      className="rounded-lg border border-gray-700 bg-gray-500 p-1 text-base font-semibold text-amber-200 hover:bg-lime-700 hover:underline focus:outline-none  dark:border-gray-600  dark:bg-gray-800 dark:text-white dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                     >
                       כניסה
                     </button>

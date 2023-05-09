@@ -1,10 +1,11 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { db } from "../../lib/firebase";
 import { Blog, MyFetchResponse } from "../../types/firestore";
 
 export default function EditBlog() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   let currentId: string = id!;
@@ -41,10 +42,11 @@ export default function EditBlog() {
     try {
       const docRef = doc(db, "blog", currentId);
       await updateDoc(docRef, { title, body, firstname, lastname });
-      window.location.reload();
+      navigate("/blogs");
     } catch (error) {
       console.error(error);
     }
+    return navigate("/blogs");
   };
 
   return (
@@ -56,7 +58,7 @@ export default function EditBlog() {
           href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre&display=swap"
         />
       </head>
-      <div className="mx-auto mt-32 max-w-screen-2xl p-6 sm:mt-32 md:mt-32 lg:mt-32 xl:mt-32 2xl:mt-32">
+      <div className="mx-auto mt-44 max-w-screen-2xl p-6 sm:mt-44 md:mt-44 lg:mt-44 xl:mt-44 2xl:mt-44">
         <label
           htmlFor="message"
           className="mb-2 block text-center text-sm font-medium text-gray-900 dark:text-white"
