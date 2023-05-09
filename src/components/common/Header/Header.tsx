@@ -53,28 +53,22 @@ export default function Header() {
                 >
                   <button className="flex rounded-lg border bg-gray-400 p-1  ">
                     <div className="">
-                      {user ? (
-                        <span className="mr-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
-                          {getTheCartQuantity}
-                        </span>
-                      ) : (
-                        <span className="mr-2 inline-flex items-center rounded-full bg-gray-100 p-1.5 text-sm font-semibold text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                          <svg
-                            aria-hidden="true"
-                            className="h-3.5 w-3.5"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            ></path>
-                          </svg>
-                          <span className="sr-only">Icon description</span>
-                        </span>
-                      )}
+                      <span className="mr-2 inline-flex items-center rounded-full bg-gray-100 p-1.5 text-sm font-semibold text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                        <svg
+                          aria-hidden="true"
+                          className="h-3.5 w-3.5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                        <span className="sr-only">Icon description</span>
+                      </span>
 
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

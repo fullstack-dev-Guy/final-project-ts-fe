@@ -20,11 +20,6 @@ export default function ForgotPassword() {
       if (email === "") {
         setEmailError("Email is a required field");
         return false;
-      }
-
-      if (auth.currentUser?.email !== email) {
-        setEmailError("Please put the Email you signed with");
-        return false;
       } else {
         setEmailError("");
         return true;
