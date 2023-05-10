@@ -39,7 +39,7 @@ export default function Header() {
                       </svg>
                     </div>
                     <div>
-                      <span className="ml-2 self-center whitespace-nowrap text-lg font-semibold dark:text-white">
+                      <span className="ml-2 self-center whitespace-nowrap text-lg font-semibold text-amber-200 dark:text-white">
                         סל קניות
                       </span>
                     </div>
@@ -81,7 +81,7 @@ export default function Header() {
                       </svg>
                     </div>
                     <div>
-                      <span className="ml-2 self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+                      <span className="ml-2 self-center whitespace-nowrap text-xl font-semibold text-amber-200 dark:text-white">
                         סל קניות
                       </span>
                     </div>

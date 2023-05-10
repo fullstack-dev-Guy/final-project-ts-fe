@@ -28,7 +28,7 @@ export default function UserMenue() {
         </span>
       </div>
       <div className="min-h-32 relative overflow-hidden bg-white shadow-md dark:bg-gray-800 md:rounded-lg">
-        <div className="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-y-0 md:space-x-4">
+        <div className="flex flex-col items-center justify-between space-y-3 p-4 lg:flex-row lg:space-y-0 lg:space-x-4">
           <Link to="/">
             <button
               onClick={handleSignOutUser}

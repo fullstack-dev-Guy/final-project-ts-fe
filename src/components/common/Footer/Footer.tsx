@@ -59,22 +59,23 @@ export default function Footer() {
   return (
     <div className="mt-34 mx-auto max-w-screen-2xl p-6">
       <footer className="bg-white p-4 dark:bg-gray-900 sm:p-6">
-        <div className="md:flex md:justify-between">
-          <div className="mb-6 md:mb-0">
-            <a href="/" className="flex items-center">
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/final-project-coffee-trailer.appspot.com/o/images%2Fsarcafelogo.jpg?alt=media&token=e1051396-7984-43a0-977d-491f3ba2e382"
-                className="mr-3 h-20 rounded-full border"
-                alt="sarcafe Logo"
-              />
-              <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
-                שרקפה
-              </span>
-            </a>
+        <hr className="my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8" />
+        <div className="mx-auto mb-6 md:mb-0">
+          <div className="mb-10 flex justify-center">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/final-project-coffee-trailer.appspot.com/o/images%2Fsarcafelogo.jpg?alt=media&token=e1051396-7984-43a0-977d-491f3ba2e382"
+              className="  mr-3 h-20 rounded-full border"
+              alt="sarcafe Logo"
+            />
+            <span className=" self-center whitespace-nowrap text-3xl font-semibold dark:text-white">
+              שרקפה
+            </span>
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6">
-            <div>
-              <h2 className="mb-6 text-center text-sm font-semibold uppercase text-gray-900 dark:text-white">
+        </div>
+        <div className="">
+          <div className="flex flex-wrap justify-around">
+            <div className="mx-10 my-5">
+              <h2 className="mb-6 text-center text-xl font-semibold uppercase text-gray-900 underline decoration-gray-500 underline-offset-4 dark:text-white">
                 ניווט באתר
               </h2>
               <ul className="text-center text-gray-600 dark:text-gray-400">
@@ -84,21 +85,21 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <Link to="/about">
-                    <span className="hover:underline">אודות</span>
-                  </Link>
+                  <a href="/about" className="hover:underline">
+                    אודות
+                  </a>
                 </li>
               </ul>
             </div>
-            <div>
-              <h2 className="mb-6 text-center text-sm font-semibold uppercase text-gray-900 dark:text-white">
+            <div className="mx-10 my-5">
+              <h2 className="mb-6 text-center text-xl font-semibold uppercase text-gray-900 underline decoration-gray-500 underline-offset-4 dark:text-white">
                 עקוב אחרינו
               </h2>
               <ul className="text-center text-gray-600 dark:text-gray-400">
                 <li className="mb-4">
                   <a
                     target="_blank"
-                    href="https://www.facebook.com/profile.php?id=100089741672456&mibextid=ZbWKwL"
+                    href="https://www.facebook.com/"
                     className="hover:underline "
                   >
                     Facebook
@@ -107,7 +108,7 @@ export default function Footer() {
                 <li>
                   <a
                     target="_blank"
-                    href="https://instagram.com/sarcafe_maor?igshid=ZGUzMzM3NWJiOQ=="
+                    href="https://www.instagram.com/"
                     className="hover:underline"
                   >
                     Instagram
@@ -115,8 +116,8 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-            <div>
-              <h2 className="mb-6 text-center text-sm font-semibold uppercase text-gray-900 dark:text-white">
+            <div className="mx-10 my-5">
+              <h2 className="mb-6 text-center text-xl font-semibold uppercase text-gray-900 underline decoration-gray-500 underline-offset-4 dark:text-white">
                 יצירת קשר
               </h2>
               <ul className="text-center text-gray-600 dark:text-gray-400">

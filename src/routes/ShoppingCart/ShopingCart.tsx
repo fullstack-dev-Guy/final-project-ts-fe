@@ -10,6 +10,13 @@ export default function ShoppingCart() {
 
   const carts = useLoaderData() as MyFetchResponse<Cart[]>;
 
+  let cartcheckexist = carts.data?.filter((x: Cart) => x.id === currentCart);
+
+  if (cartcheckexist![0] === undefined) {
+    localStorage.clear();
+    navigate("/shoppingcartdummy");
+  }
+
   const currentCartDetails = carts.data?.filter((x) => x.id === currentCart); //i got the cart object with all the details
 
   let priceDiscount: any = "no";
@@ -491,7 +498,7 @@ export default function ShoppingCart() {
                             </td>
                             <th
                               scope="row"
-                              className="flex items-center justify-center whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white"
+                              className="mx-auto flex w-28 items-center justify-center whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white"
                             >
                               <img
                                 src={x.imageToProduct}
