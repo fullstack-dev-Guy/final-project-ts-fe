@@ -86,7 +86,7 @@ const router = createBrowserRouter([
     element: <NotFoundPage />,
   },
   {
-    path: "notfoundpage",
+    path: "/notfoundpage",
     element: <NotFoundPage />,
   },
   {
