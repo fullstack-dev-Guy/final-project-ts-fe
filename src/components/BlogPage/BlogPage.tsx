@@ -36,7 +36,7 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <div className="mx-auto mt-32 mt-20 max-w-screen-xl p-6">
+    <div className="mx-auto mt-44 max-w-screen-xl p-6">
       <article className=" mb-4 rounded-lg border border-gray-200 bg-orange-100 shadow-md dark:border-gray-700 dark:bg-gray-800">
         <p>{myBlogPage?.id}</p>
 
