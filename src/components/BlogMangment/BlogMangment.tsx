@@ -47,7 +47,7 @@ export default function BlogMangment() {
 
   return (
     <div className="mt-44">
-      <div className="mx-auto mt-44 flex h-full w-full max-w-screen-2xl justify-center  bg-gradient-to-tr bg-cover bg-center p-6 sm:mt-44 md:mt-44 lg:mt-44">
+      <div className="mx-auto  flex h-full w-full max-w-screen-2xl justify-center  bg-gradient-to-tr bg-cover bg-center p-6 ">
         <Outlet />
       </div>
       <section className="bg-gray-50 p-3 dark:bg-gray-900 sm:p-5">

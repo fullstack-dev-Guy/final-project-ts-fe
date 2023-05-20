@@ -29,7 +29,7 @@ export default function DeleteBlog2() {
           href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre&display=swap"
         />
       </head>
-      <div className=" mt-44 flex h-full w-full max-w-screen-2xl justify-center  bg-gradient-to-tr bg-cover bg-center p-6 sm:mt-44 md:mt-44 lg:mt-44">
+      <div className="  flex h-full w-full max-w-screen-2xl justify-center  bg-gradient-to-tr bg-cover bg-center p-6 ">
         <div className="fixed top-32 z-10 mx-auto p-6">
           <div
             id="alert-additional-content-2"

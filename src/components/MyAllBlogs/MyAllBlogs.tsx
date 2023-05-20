@@ -24,9 +24,12 @@ export default function MyAllBlogs() {
           href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre&display=swap"
         />
       </head>
-      <div className="mx-auto  max-w-screen-xl p-4">
+      <div className="mx-auto mt-44 max-w-screen-xl p-2">
+        <div className="mx-auto  flex h-full w-full max-w-screen-2xl justify-center  bg-gradient-to-tr bg-cover bg-center ">
+          <Outlet />
+        </div>
         <section className="bg-white dark:bg-gray-900">
-          <div className="mx-auto max-w-screen-xl py-2 px-4 lg:py-2 lg:px-6">
+          <div className="mx-auto max-w-screen-xl py-2 px-4 lg:py-2 lg:px-4">
             <div className="mx-auto mb-6 max-w-screen-sm text-center lg:mb-6">
               <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white lg:text-4xl">
                 הבלוגים שלי
@@ -106,9 +109,6 @@ export default function MyAllBlogs() {
               ) : (
                 <p>Loading...</p>
               )}
-            </div>
-            <div className="flex justify-center">
-              <Outlet />
             </div>
           </div>
         </section>
