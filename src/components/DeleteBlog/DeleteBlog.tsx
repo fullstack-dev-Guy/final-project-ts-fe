@@ -44,22 +44,22 @@ export default function DeleteBlog() {
           <span className="sr-only ">Info</span>
           <h3 className="text-lg font-medium ">
             {" "}
-            ? האם את/ה בטוח/ה במחיקת בלוג זה
+            האם את/ה בטוח/ה במחיקת בלוג זה ?
           </h3>
-          <p>Are you sure you want to delete post with id: {id}?</p>
+          <p> ? Are you sure you want to delete post with id: {id}</p>
         </div>
 
         <div className="mt-2 mb-4 text-sm">
-          .על מנת למחוק את הבלוג יש ללחוץ על כפתור מחק , פעולה זו תמחק את נתוני
+          על מנת למחוק את הבלוג יש ללחוץ על כפתור מחק , פעולה זו תמחק את נתוני
           הבלוג באופן סופי . לביטול מחיקת הבלוג יש ללחוץ לחצן "בטל פעולה" שיחזיר
-          למצב קודם
+          למצב קודם.
         </div>
 
         <div className="flex justify-center">
           <Link to="/blogs">
             <button
               onClick={() => handleDeleteBlog(currentId)}
-              className="mr-2 inline-flex items-center rounded-lg bg-red-800 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-red-900 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+              className="m-2 inline-flex items-center rounded-lg bg-red-800 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-red-900 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
             >
               מחק
             </button>
@@ -68,7 +68,7 @@ export default function DeleteBlog() {
           <button
             onClick={() => navigate("/myallblogs")}
             type="button"
-            className="rounded-lg border border-red-800 bg-transparent px-3 py-1.5 text-center text-xs font-medium text-red-800 hover:bg-red-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-600 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-800"
+            className="m-2 rounded-lg border border-red-800 bg-transparent px-3 py-1.5 text-center text-xs font-medium text-red-800 hover:bg-red-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-600 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-800"
             data-dismiss-target="#alert-additional-content-2"
             aria-label="Close"
           >
